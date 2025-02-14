@@ -9,7 +9,7 @@ import (
 func (r *UserRepository) GetByID(ctx context.Context, id string) (*user_model.User, error) {
 	r.logger.Info("Getting user by id...")
 	var user user_model.User
-	if err := r.db.WithContext(ctx).First(&user, id).Error; err != nil {
+	if err := r.db.WithContext(ctx).Where("id = ?", id).First(&user).Error; err != nil {
 		r.logger.Errorf("Failed to get user by id: %v", err)
 		return nil, err
 	}
@@ -26,4 +26,15 @@ func (r *UserRepository) GetAll(ctx context.Context) ([]user_model.User, error) 
 	}
 	r.logger.Info("Users retrieved successfully")
 	return users, nil
+}
+
+func (r *UserRepository) GetByEmail(ctx context.Context, email string) (*user_model.User, error) {
+	r.logger.Info("Getting user by email...")
+	var user user_model.User
+	if err := r.db.WithContext(ctx).Where("email = ?", email).First(&user).Error; err != nil {
+		r.logger.Errorf("Failed to get user by email: %v", err)
+		return nil, err
+	}
+	r.logger.Info("User retrieved successfully")
+	return &user, nil
 }

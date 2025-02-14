@@ -3,9 +3,8 @@ package jwt_dto
 import user_model "github.com/root9464/Hakaton_Zalupa/module/user/model"
 
 type UserData struct {
-	ID       int64  `json:"id" validate:"required"`
-	Username string `json:"username" validate:"required"`
-	Role     string `json:"role" validate:"required"`
+	ID   string `json:"id" validate:"required"`
+	Role string `json:"role" validate:"required"`
 }
 
 type UserJwtPayload struct {

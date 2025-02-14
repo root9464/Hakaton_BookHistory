@@ -9,7 +9,7 @@ import (
 	"github.com/root9464/Hakaton_Zalupa/shared/utils"
 )
 
-func (s *UserService) Create(ctx context.Context, dto *user_dto.CreateType) error {
+func (s *UserService) Create(ctx context.Context, dto *user_dto.CreateDto) error {
 	if err := s.validator.Struct(dto); err != nil {
 		s.logger.Warnf("validate error: %s", err.Error())
 		return &fiber.Error{

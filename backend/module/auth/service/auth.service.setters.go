@@ -4,12 +4,13 @@ import (
 	"context"
 
 	"github.com/gofiber/fiber/v2"
-	auth_dto "github.com/root9464/Ton-students/module/auth/dto"
-	user_dto "github.com/root9464/Ton-students/module/user/dto"
-	tma "github.com/telegram-mini-apps/init-data-golang"
+	auth_dto "github.com/root9464/Hakaton_Zalupa/module/auth/dto"
+	user_dto "github.com/root9464/Hakaton_Zalupa/module/user/dto"
+	user_model "github.com/root9464/Hakaton_Zalupa/module/user/model"
+	"github.com/root9464/Hakaton_Zalupa/shared/utils"
 )
 
-func (s *authService) Authorize(ctx context.Context, dto *auth_dto.AutorizeDto) (*user_dto.ShortUserType, error) {
+func (s *authService) Authorize(ctx context.Context, dto *auth_dto.AutorizeDto) (*user_model.User, error) {
 	if err := s.validator.Struct(dto); err != nil {
 		s.logger.Warnf("validate error: %s", err.Error())
 		return nil, &fiber.Error{
@@ -18,34 +19,52 @@ func (s *authService) Authorize(ctx context.Context, dto *auth_dto.AutorizeDto) 
 		}
 	}
 
-	initData, err := tma.Parse(dto.InitDataRaw)
+	existUser, err := s.userService.GetByEmail(ctx, dto.Email)
 	if err != nil {
-		s.logger.Warnf("parse init data error: %s", err.Error())
-		return nil, &fiber.Error{
-			Code:    400,
-			Message: err.Error(),
-		}
-	}
-
-	s.logger.Infof("init data: %+v", initData)
-
-	srcUser := user_dto.UserType{
-		ID:        initData.User.ID,
-		Username:  initData.User.Username,
-		Firstname: &initData.User.FirstName,
-		Lastname:  &initData.User.LastName,
-		IsPremium: initData.User.IsPremium,
-		Hash:      initData.Hash,
-	}
-
-	userInDb, err := s.userService.UpsertUser(ctx, &srcUser)
-	if err != nil {
-		s.logger.Warnf("create user error: %s", err.Error())
+		s.logger.Warnf("get user error: %s", err.Error())
 		return nil, &fiber.Error{
 			Code:    500,
 			Message: err.Error(),
 		}
 	}
 
-	return userInDb, nil
+	if existUser == nil || !utils.ComparePassword(existUser.Password, dto.Password) {
+		s.logger.Warn("password or email is incorrect")
+		return nil, &fiber.Error{
+			Code:    401,
+			Message: "password or email is incorrect",
+		}
+	}
+
+	return existUser, nil
+}
+
+func (s *authService) Register(ctx context.Context, dto *auth_dto.RegisterDto) error {
+	if err := s.validator.Struct(dto); err != nil {
+		s.logger.Warnf("validate error: %s", err.Error())
+		return &fiber.Error{
+			Code:    400,
+			Message: err.Error(),
+		}
+	}
+
+	userDto := user_dto.CreateDto{
+		Email:      dto.Email,
+		Password:   dto.Password,
+		Name:       dto.Name,
+		Surname:    dto.Surname,
+		Patronymic: dto.Patronymic,
+		Phone:      dto.Phone,
+	}
+
+	err := s.userService.Create(ctx, &userDto)
+	if err != nil {
+		s.logger.Warnf("create user error: %s", err.Error())
+		return &fiber.Error{
+			Code:    500,
+			Message: err.Error(),
+		}
+	}
+
+	return nil
 }

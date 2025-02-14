@@ -32,7 +32,7 @@ func (f *JwtFuncs) GenerateKeyPair(userData jwt_dto.UserData) (*string, *string,
 	}
 	f.logger.Info("Validating success...")
 
-	userRaw := fmt.Sprintf("%d:%s", userData.ID, userData.Username)
+	userRaw := fmt.Sprintf("%s", userData.ID)
 
 	hash := sha256.New()
 	hash.Write([]byte(userRaw))

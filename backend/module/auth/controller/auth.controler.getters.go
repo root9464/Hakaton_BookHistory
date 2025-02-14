@@ -2,10 +2,31 @@ package auth_controller
 
 import (
 	"github.com/gofiber/fiber/v2"
-	auth_dto "github.com/root9464/Ton-students/module/auth/dto"
-	jwt_dto "github.com/root9464/Ton-students/module/jwt/dto"
-	"github.com/root9464/Ton-students/shared/utils"
+	auth_dto "github.com/root9464/Hakaton_Zalupa/module/auth/dto"
+	jwt_dto "github.com/root9464/Hakaton_Zalupa/module/jwt/dto"
+	"github.com/root9464/Hakaton_Zalupa/shared/utils"
 )
+
+func (c *authController) Register(ctx *fiber.Ctx) error {
+	data := new(auth_dto.RegisterDto)
+	if err := ctx.BodyParser(data); err != nil {
+		return ctx.Status(400).JSON(&fiber.Map{
+			"status":  "failed",
+			"message": err.Error(),
+		})
+	}
+
+	if err := c.authService.Register(ctx.Context(), data); err != nil {
+		if errorResponse, code := utils.HandlerError(err); errorResponse != nil {
+			return ctx.Status(code).JSON(errorResponse)
+		}
+	}
+
+	return ctx.Status(200).JSON(&fiber.Map{
+		"status":  "success",
+		"message": "User registered successfully",
+	})
+}
 
 func (c *authController) Authorize(ctx *fiber.Ctx) error {
 	data := new(auth_dto.AutorizeDto)
@@ -24,9 +45,8 @@ func (c *authController) Authorize(ctx *fiber.Ctx) error {
 	}
 
 	accessToken, refreshToken, err := c.jwtModule.GenerateKeyPair(jwt_dto.UserData{
-		ID:       user.ID,
-		Username: user.VisibleName,
-		Role:     string(user.Role),
+		ID:   user.ID,
+		Role: string(user.Role),
 	})
 
 	if err != nil {

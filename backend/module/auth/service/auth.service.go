@@ -4,18 +4,19 @@ import (
 	"context"
 
 	"github.com/go-playground/validator/v10"
-	"github.com/root9464/Ton-students/config"
-	auth_dto "github.com/root9464/Ton-students/module/auth/dto"
-	jwt_funcs "github.com/root9464/Ton-students/module/jwt/functions"
-	user_dto "github.com/root9464/Ton-students/module/user/dto"
-	user_service "github.com/root9464/Ton-students/module/user/service"
-	"github.com/root9464/Ton-students/shared/logger"
+	"github.com/root9464/Hakaton_Zalupa/config"
+	auth_dto "github.com/root9464/Hakaton_Zalupa/module/auth/dto"
+	jwt_funcs "github.com/root9464/Hakaton_Zalupa/module/jwt/functions"
+	user_model "github.com/root9464/Hakaton_Zalupa/module/user/model"
+	user_service "github.com/root9464/Hakaton_Zalupa/module/user/service"
+	"github.com/root9464/Hakaton_Zalupa/shared/logger"
 )
 
 var _ IAuthService = (*authService)(nil)
 
 type IAuthService interface {
-	Authorize(ctx context.Context, dto *auth_dto.AutorizeDto) (*user_dto.ShortUserType, error)
+	Authorize(ctx context.Context, dto *auth_dto.AutorizeDto) (*user_model.User, error)
+	Register(ctx context.Context, dto *auth_dto.RegisterDto) error
 }
 
 type authService struct {

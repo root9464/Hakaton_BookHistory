@@ -34,7 +34,7 @@ func NewUserModule(
 
 func (m *UserModule) UserRepository() user_repository.IUserRepository {
 	if m.userRepo == nil {
-		m.userRepo = user_repository.NewUserRepository(m.logger, nil)
+		m.userRepo = user_repository.NewUserRepository(m.logger, m.db)
 	}
 	return m.userRepo
 }

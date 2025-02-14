@@ -3,13 +3,13 @@ package auth_module
 import (
 	"github.com/go-playground/validator/v10"
 	"github.com/gofiber/fiber/v2"
-	"github.com/root9464/Ton-students/config"
-	auth_controller "github.com/root9464/Ton-students/module/auth/controller"
-	auth_service "github.com/root9464/Ton-students/module/auth/service"
-	jwt_module "github.com/root9464/Ton-students/module/jwt"
-	user_service "github.com/root9464/Ton-students/module/user/service"
-	"github.com/root9464/Ton-students/shared/logger"
-	"github.com/root9464/Ton-students/shared/utils"
+	"github.com/root9464/Hakaton_Zalupa/config"
+	auth_controller "github.com/root9464/Hakaton_Zalupa/module/auth/controller"
+	auth_service "github.com/root9464/Hakaton_Zalupa/module/auth/service"
+	jwt_module "github.com/root9464/Hakaton_Zalupa/module/jwt"
+	user_service "github.com/root9464/Hakaton_Zalupa/module/user/service"
+	"github.com/root9464/Hakaton_Zalupa/shared/logger"
+	"github.com/root9464/Hakaton_Zalupa/shared/utils"
 )
 
 type AuthModule struct {
@@ -59,6 +59,7 @@ func (m *AuthModule) AuthController() auth_controller.IAuthController {
 func (m *AuthModule) AuthRoutes(router fiber.Router) {
 	auth := router.Group("/auth")
 	auth.Post("/authorize", m.AuthController().Authorize)
+	auth.Post("/register", m.AuthController().Register)
 	auth.Post("/refresh", m.AuthController().RefreshAccessToken)
 	auth.Get("/jwt-ping", m.AuthController().JwtPing)
 }

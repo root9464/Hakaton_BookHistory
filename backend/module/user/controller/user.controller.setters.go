@@ -7,7 +7,7 @@ import (
 )
 
 func (c *UserController) Create(ctx *fiber.Ctx) error {
-	dto := new(user_dto.CreateType)
+	dto := new(user_dto.CreateDto)
 	if err := ctx.BodyParser(dto); err != nil {
 		return &fiber.Error{
 			Code:    400,

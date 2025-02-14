@@ -15,6 +15,7 @@ type IUserRepository interface {
 	GetAll(ctx context.Context) ([]user_model.User, error)
 	GetByID(ctx context.Context, id string) (*user_model.User, error)
 	Delete(ctx context.Context, id string) error
+	GetByEmail(ctx context.Context, email string) (*user_model.User, error)
 }
 
 type UserRepository struct {

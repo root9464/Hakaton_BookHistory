@@ -16,6 +16,7 @@ func Migrate(db *gorm.DB, trigger bool, log *logger.Logger) error {
 
 		log.Info("📦 Creating types...")
 
+		db.Exec("CREATE EXTENSION IF NOT EXISTS \"uuid-ossp\"")
 		db.Exec("CREATE TYPE role AS ENUM('administarator', 'user')")
 
 		if err := db.AutoMigrate(models...); err != nil {

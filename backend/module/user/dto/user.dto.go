@@ -1,6 +1,6 @@
 package user_dto
 
-type CreateType struct {
+type CreateDto struct {
 	Email      string `json:"email"`
 	Password   string `json:"password"`
 	Name       string `json:"name"`

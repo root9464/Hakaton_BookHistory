@@ -1,11 +1,17 @@
 package app
 
-import user_module "github.com/root9464/Hakaton_Zalupa/module/user"
+import (
+	auth_module "github.com/root9464/Hakaton_Zalupa/module/auth"
+	jwt_module "github.com/root9464/Hakaton_Zalupa/module/jwt"
+	user_module "github.com/root9464/Hakaton_Zalupa/module/user"
+)
 
 // jwt_module "github.com/root9464/Ton-students/module/jwt"
 
 type moduleProvider struct {
 	userModule *user_module.UserModule
+	authModule *auth_module.AuthModule
+	jwtModule  *jwt_module.JwtModule
 
 	app *App
 }
@@ -25,6 +31,8 @@ func NewModuleProvider(app *App) (*moduleProvider, error) {
 func (p *moduleProvider) initDeps() error {
 	inits := []func() error{
 		p.UserModule,
+		p.JwtModule,
+		p.AuthModule,
 	}
 	for _, init := range inits {
 		err := init()
@@ -36,7 +44,17 @@ func (p *moduleProvider) initDeps() error {
 	return nil
 }
 
+func (p *moduleProvider) JwtModule() error {
+	p.jwtModule = jwt_module.NewJwtModule(p.app.logger, p.app.validator, p.app.db, p.app.config.JwtPrivateKey, p.app.config.JwtPublicKey)
+	return nil
+}
+
 func (p *moduleProvider) UserModule() error {
 	p.userModule = user_module.NewUserModule(p.app.logger, p.app.validator, p.app.db)
+	return nil
+}
+
+func (p *moduleProvider) AuthModule() error {
+	p.authModule = auth_module.NewAuthModule(p.app.logger, p.app.validator, p.app.config, p.userModule.UserService(), *p.jwtModule)
 	return nil
 }

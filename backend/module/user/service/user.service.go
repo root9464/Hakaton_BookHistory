@@ -13,11 +13,12 @@ import (
 var _ IUserService = (*UserService)(nil)
 
 type IUserService interface {
-	Create(ctx context.Context, dto *user_dto.CreateType) error
+	Create(ctx context.Context, dto *user_dto.CreateDto) error
 	Delete(ctx context.Context, id string) error
 
 	GetByID(ctx context.Context, id string) (*user_model.User, error)
 	GetAll(ctx context.Context) ([]user_model.User, error)
+	GetByEmail(ctx context.Context, email string) (*user_model.User, error)
 }
 type UserService struct {
 	repo      user_repository.IUserRepository

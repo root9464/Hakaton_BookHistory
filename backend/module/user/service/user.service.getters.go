@@ -48,3 +48,24 @@ func (s *UserService) GetAll(ctx context.Context) ([]user_model.User, error) {
 
 	return users, nil
 }
+
+func (s *UserService) GetByEmail(ctx context.Context, email string) (*user_model.User, error) {
+	user, err := s.repo.GetByEmail(ctx, email)
+	if err != nil {
+		s.logger.Warnf("create user error: %s", err.Error())
+		return nil, &fiber.Error{
+			Code:    500,
+			Message: err.Error(),
+		}
+	}
+
+	if user == nil {
+		s.logger.Warn("user not found")
+		return nil, &fiber.Error{
+			Code:    404,
+			Message: "User not found",
+		}
+	}
+
+	return user, nil
+}
