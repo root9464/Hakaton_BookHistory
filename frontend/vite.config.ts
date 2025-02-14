@@ -1,13 +1,12 @@
 import svgr from '@svgr/rollup';
-import tailwindcss from '@tailwindcss/vite';
 import { TanStackRouterVite } from '@tanstack/router-plugin/vite';
 import react from '@vitejs/plugin-react-swc';
+import path from 'path';
 import { defineConfig } from 'vite';
 
 export default defineConfig({
   plugins: [
     react(),
-    tailwindcss(),
     TanStackRouterVite(),
     svgr({
       include: '**/*.svg',
@@ -27,4 +26,27 @@ export default defineConfig({
       },
     }),
   ],
+
+  server: {
+    proxy: {
+      '/api': {
+        target: 'http://localhost:6069',
+        changeOrigin: true,
+        secure: false,
+      },
+    },
+  },
+
+  resolve: {
+    alias: {
+      '@': path.resolve(__dirname, './src'),
+      '@routes': path.resolve(__dirname, './src/routes'),
+      '@pages': path.resolve(__dirname, './src/pages'),
+      '@modules': path.resolve(__dirname, './src/modules'),
+      '@components': path.resolve(__dirname, './src/components'),
+      '@ui': path.resolve(__dirname, './src/components/ui'),
+      '@shared': path.resolve(__dirname, './src/shared'),
+      '@hooks': path.resolve(__dirname, './src/shared/hooks'),
+    },
+  },
 });

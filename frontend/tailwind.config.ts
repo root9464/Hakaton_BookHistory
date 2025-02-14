@@ -14,7 +14,12 @@ export default {
     extend: {
       borderRadius: {},
 
-      colors: {},
+      colors: {
+        uiLightGray: '#DADBE0',
+        uiDeepGray: '#373B40',
+        uiLightWhite: '#F4F4F5',
+        uiGhostGray: '#71717A',
+      },
     },
   },
   plugins: [heroui()],
