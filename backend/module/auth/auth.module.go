@@ -62,4 +62,5 @@ func (m *AuthModule) AuthRoutes(router fiber.Router) {
 	auth.Post("/register", m.AuthController().Register)
 	auth.Post("/refresh", m.AuthController().RefreshAccessToken)
 	auth.Get("/jwt-ping", m.AuthController().JwtPing)
+	auth.Post("/logout", m.AuthController().Logout)
 }
