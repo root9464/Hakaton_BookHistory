@@ -2,12 +2,14 @@ package app
 
 import (
 	//jwt_module "github.com/root9464/Hakaton_Zalupa/module/jwt"
+	api_module "github.com/root9464/Hakaton_Zalupa/module/api"
 )
 
 type moduleProvider struct {
 	// userModule          *user_module.UserModule
 
 	//jwtModule *jwt_module.JwtModule
+	apiModule *api_module.ApiModule
 	app       *App
 }
 
@@ -25,7 +27,7 @@ func NewModuleProvider(app *App) (*moduleProvider, error) {
 
 func (p *moduleProvider) initDeps() error {
 	inits := []func() error{
-		// p.UserModule,
+		p.ApiModule,
 	}
 	for _, init := range inits {
 		err := init()
@@ -41,3 +43,8 @@ func (p *moduleProvider) initDeps() error {
 // 	p.userModule = user_module.NewUserModule(p.app.logger, p.app.validator, p.app.db, *p.jwtModule, p.app.config.JwtPublicKey)
 // 	return nil
 // }
+
+func (p *moduleProvider) ApiModule() error {
+	p.apiModule = api_module.NewApiModule(p.app.logger, p.app.config)
+	return nil
+}

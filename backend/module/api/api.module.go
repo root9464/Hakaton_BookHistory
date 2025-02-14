@@ -1,7 +1,7 @@
 package api_module
 
 import (
-	"github.com/gofiber/fiber"
+	"github.com/gofiber/fiber/v2"
 	"github.com/root9464/Hakaton_Zalupa/config"
 	api_controller "github.com/root9464/Hakaton_Zalupa/module/api/controller"
 	api_service "github.com/root9464/Hakaton_Zalupa/module/api/service"
@@ -17,33 +17,31 @@ type ApiModule struct {
 }
 
 func NewApiModule(logger *logger.Logger, config *config.Config,
-	apiService api_service.IApiService, apiController api_controller.ApiController) *ApiModule {
+	) *ApiModule {
 	return &ApiModule{
 		logger:        logger,
 		config:        config,
-		apiService:    apiService,
-		apiController: apiController,
 	}
 }
 
-func (m *ApiModule) AuthService() api_service.IApiService {
+func (m *ApiModule) ApiService() api_service.IApiService {
 	if m.apiService == nil {
-		m.apiService = api_service.NewAuthService(m.logger, m.config, m.apiService)
+		m.apiService = api_service.NewApiService(m.logger, m.config)
 	}
 	return m.apiService
 }
 
-func (m *ApiModule) AuthController() api_controller.IAuthController {
-
+func (m *ApiModule) ApiController() api_controller.IApiController {
 	if m.apiController == nil {
-		m.apiController = api_controller.NewAuthController(m.AuthService(), m.logger, m.config)
+		m.apiController = api_controller.NewApiController(m.ApiService(), m.logger, m.config)
 	}
 	return m.apiController
 }
 
 func (m *ApiModule) AuthRoutes(router fiber.Router) {
-	auth := router.Group("/api")
-	auth.Post("/authorize", m.AuthController().Authorize)
-	auth.Post("/refresh", m.AuthController().RefreshAccessToken)
-	auth.Get("/jwt-ping", m.AuthController().JwtPing)
+	auth := router.Group("/exapi")
+
+	auth.Post("/create", m.ApiController().CreateRecord)
+
+	
 }

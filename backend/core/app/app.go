@@ -163,9 +163,9 @@ func (app *App) runHttpServer() error {
 }
 
 func (app *App) initRouter() error {
-	// api := app.app.Group("/api")
+	api := app.app.Group("/api")
 
-	// app.moduleProvider.authModule.AuthRoutes(api)
+	app.moduleProvider.apiModule.AuthRoutes(api)
 
 	return nil
 }
