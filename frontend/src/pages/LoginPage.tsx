@@ -1,11 +1,10 @@
-import { AuthModule } from '../modules/auth/Module';
 import SvoFrame from '@/assets//png/svo.png';
+import { LoginModule } from '@/modules/login/Module';
 
 export default function AuthPage() {
   return (
     <div className='relative flex h-full w-full flex-row items-center justify-between pr-[40px]'>
-      <AuthModule />
-
+      <LoginModule />
       <div className='relative flex h-fit w-fit flex-col items-center justify-center'>
         <p className='absolute bottom-5 text-3xl font-bold text-white'>Цени наших предков !</p>
         <img className='h-[600px] w-[500px] rounded-[40px]' src={SvoFrame} alt='svo frame' />
