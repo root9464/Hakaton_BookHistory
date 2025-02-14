@@ -7,10 +7,10 @@ import (
 	"github.com/go-playground/validator/v10"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
-	"github.com/root9464/Ton-students/config"
-	"github.com/root9464/Ton-students/database"
-	"github.com/root9464/Ton-students/shared/logger"
-	"github.com/root9464/Ton-students/shared/middleware"
+	"github.com/root9464/Hakaton_Zalupa/config"
+	"github.com/root9464/Hakaton_Zalupa/database"
+	"github.com/root9464/Hakaton_Zalupa/shared/logger"
+	//"github.com/root9464/Hakaton_Zalupa/shared/middleware"
 	"gorm.io/gorm"
 )
 
@@ -40,7 +40,7 @@ func (app *App) Run() error {
 		AllowOrigins:     "*",
 		AllowCredentials: false,
 	}))
-	app.app.Use(middleware.LoggerMiddleware())
+	//app.app.Use(middleware.LoggerMiddleware())
 
 	err := app.initDeps()
 

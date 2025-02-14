@@ -1,13 +1,13 @@
 package app
 
 import (
-	jwt_module "github.com/root9464/Ton-students/module/jwt"
+	//jwt_module "github.com/root9464/Hakaton_Zalupa/module/jwt"
 )
 
 type moduleProvider struct {
 	// userModule          *user_module.UserModule
 
-	jwtModule *jwt_module.JwtModule
+	//jwtModule *jwt_module.JwtModule
 	app       *App
 }
 

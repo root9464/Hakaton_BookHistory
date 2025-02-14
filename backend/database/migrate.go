@@ -1,12 +1,8 @@
 package database
 
 import (
-	chat_model "github.com/root9464/Ton-students/module/chat/model"
-	common_model "github.com/root9464/Ton-students/module/model/common"
-	notifications_model "github.com/root9464/Ton-students/module/notifications/model"
-	serv_model "github.com/root9464/Ton-students/module/service_module/model"
-	user_model "github.com/root9464/Ton-students/module/user/model"
-	"github.com/root9464/Ton-students/shared/logger"
+	model "github.com/root9464/Hakaton_Zalupa/database/model"
+	"github.com/root9464/Hakaton_Zalupa/shared/logger"
 	"gorm.io/gorm"
 )
 
@@ -15,21 +11,15 @@ func Migrate(db *gorm.DB, trigger bool, log *logger.Logger) error {
 	if trigger {
 		log.Info("📦 Migrating database...")
 		models := []interface{}{
-			&user_model.User{},
-			&user_model.UserInfo{},
-
-			&serv_model.Service{},
-			&serv_model.ServiceInfo{},
-			&serv_model.Tags{},
-			&serv_model.ServiceSettings{},
-
-			&notifications_model.Notification{},
-
-			&chat_model.Chat{},
-
-			&chat_model.Message{},
-
-			&common_model.ChatUser{},
+			&model.User{},
+			&model.Municipality{},
+			&model.Soldier{},
+			&model.Award{},
+			&model.Document{},
+			&model.Log{},
+			&model.Template{},
+			&model.SoldierTemplate{},
+			//&model.Notification{},
 		}
 
 		log.Info("📦 Creating types...")
