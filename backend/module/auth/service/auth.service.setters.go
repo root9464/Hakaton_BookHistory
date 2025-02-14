@@ -60,10 +60,13 @@ func (s *authService) Register(ctx context.Context, dto *auth_dto.RegisterDto) e
 	err := s.userService.Create(ctx, &userDto)
 	if err != nil {
 		s.logger.Warnf("create user error: %s", err.Error())
-		return &fiber.Error{
-			Code:    500,
-			Message: err.Error(),
+		if errorResponse, code := utils.HandlerError(err); errorResponse != nil {
+			return &fiber.Error{
+				Code:    code,
+				Message: err.Error(),
+			}
 		}
+
 	}
 
 	return nil
