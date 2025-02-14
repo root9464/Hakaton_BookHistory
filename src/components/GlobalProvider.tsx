@@ -1,15 +1,16 @@
-import { createRouter, RouterProvider } from '@tanstack/react-router';
-
-// Import the generated route tree
 import { HeroUIProvider } from '@heroui/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { createRouter, RouterProvider } from '@tanstack/react-router';
 import { routeTree } from '../routeTree.gen';
 
-// Create a new router instance
-const router = createRouter({ routeTree });
+const router = createRouter({
+  routeTree,
+  context: {
+    userRole: null,
+  },
+});
 const queryClient = new QueryClient();
 
-// Register the router instance for type safety
 declare module '@tanstack/react-router' {
   interface Register {
     router: typeof router;
@@ -17,6 +18,7 @@ declare module '@tanstack/react-router' {
 }
 
 export const GlobalProvider = () => {
+  // хук для получения значения из store для контекста (лучше использовать store zustand а не чистый функционал tanstack router)
   return (
     <HeroUIProvider>
       <QueryClientProvider client={queryClient}>
