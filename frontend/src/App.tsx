@@ -1,12 +1,11 @@
-function App() {
+import { Auth } from "./pages/auth";
 
+function App() {
   return (
     <>
-      <div>
-          <h1 className="text-amber-300">Hakaton</h1>
-      </div>
+      <Auth />
     </>
-  )
+  );
 }
 
-export default App
+export default App;
