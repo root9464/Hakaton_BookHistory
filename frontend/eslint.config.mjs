@@ -48,21 +48,9 @@ export default tseslint.config(
     rules: {
       'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
       'react/react-in-jsx-scope': 'off',
-      '@typescript-eslint/naming-convention': [
-        'error',
-        {
-          selector: ['parameter', 'variable'],
-          leadingUnderscore: 'require',
-          format: ['camelCase'],
-          modifiers: ['unused'],
-        },
-        {
-          selector: ['parameter', 'variable'],
-          leadingUnderscore: 'allowDouble',
-          format: ['camelCase', 'PascalCase', 'UPPER_CASE', 'snake_case'],
-        },
-      ],
+      '@typescript-eslint/naming-convention': 'off',
       'no-unneeded-ternary': ['error', { defaultAssignment: false }],
+     
     },
   },
 

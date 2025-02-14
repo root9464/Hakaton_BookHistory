@@ -1,9 +1,11 @@
 import { Button, Input } from '@heroui/react';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { Link } from '@tanstack/react-router';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
+import { useRegister } from '../hooks/useAuth';
 
-const schema = z.object({
+const FormShema = z.object({
   email: z.string().email('Некорректный email'),
   password: z
     .string()
@@ -13,10 +15,15 @@ const schema = z.object({
   name: z.string().min(1, 'Имя обязательно для заполнения'),
   surname: z.string().min(1, 'Фамилия обязательна для заполнения'),
   patronymic: z.string().optional(),
-  phone: z.string().regex(/^\+7\d{10}$/, 'Номер телефона должен быть в формате +7XXXXXXXXXX'),
+  phone: z
+    .string()
+    .min(10, 'Номер телефона должен содержать 10 цифр')
+    .max(10, 'Номер телефона должен содержать 10 цифр')
+    .regex(/^\d{10}$/, 'Номер телефона должен содержать только цифры')
+    .transform((val) => `+7${val}`),
 });
 
-type FormData = z.infer<typeof schema>;
+export type FormData = z.infer<typeof FormShema>;
 
 export const RegisterForm = () => {
   const {
@@ -24,7 +31,7 @@ export const RegisterForm = () => {
     handleSubmit,
     formState: { errors },
   } = useForm<FormData>({
-    resolver: zodResolver(schema),
+    resolver: zodResolver(FormShema),
     defaultValues: {
       email: '',
       password: '',
@@ -35,10 +42,13 @@ export const RegisterForm = () => {
     },
   });
 
-  const onSubmit = (data: FormData) => console.log(data);
+  const { data, mutate } = useRegister();
+  console.log(data);
+
+  const onSubmit = (data: FormData) => mutate(data);
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className='grid h-fit w-fit grid-cols-[1fr_1fr] grid-rows-[auto_auto] gap-5'>
+    <form onSubmit={handleSubmit(onSubmit)} className='grid h-fit w-fit grid-cols-[1fr_1fr] grid-rows-[auto_auto_auto] gap-5'>
       <div className='flex flex-col gap-5'>
         <Input
           {...register('email')}
@@ -93,8 +103,13 @@ export const RegisterForm = () => {
           isInvalid={!!errors.patronymic}
         />
       </div>
-      <div className='col-span-2'>
-        <Button type='submit' className='bg-uiDeepGray col-span-2 mt-4 p-2 text-white'>
+
+      <div className='col-span-2 flex w-1/2 flex-col items-center justify-center place-self-center'>
+        <div className='flex flex-row gap-4 text-xs font-medium text-blue-600'>
+          <Link to={'/login'}>Уже есть аккаунт</Link>
+          <Link to='.'>Войти через гос услуги</Link>
+        </div>
+        <Button type='submit' className='mt-4 bg-uiDeepGray p-2 text-white'>
           Зарегистрироваться
         </Button>
       </div>
