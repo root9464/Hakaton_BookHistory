@@ -1,0 +1,9 @@
+@import "tailwindcss";
+
+@layer base {
+
+  html,
+  body {
+    @apply scroll-smooth w-full min-h-screen h-auto;
+  }
+}
