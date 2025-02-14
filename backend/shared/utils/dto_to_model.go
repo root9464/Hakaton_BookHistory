@@ -3,15 +3,12 @@ package utils
 import (
 	"crypto/ed25519"
 	"encoding/hex"
-	"encoding/json"
 	"fmt"
 	"time"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/jinzhu/copier"
 	"github.com/mitchellh/mapstructure"
-	user_model "github.com/root9464/Ton-students/module/user/model"
-	"github.com/samber/lo"
 )
 
 func ConvertMapStructure[T, D any](dto D) (*T, error) {
@@ -71,46 +68,4 @@ func HexToKeys(privateKeyHex, publicKeyHex string) (ed25519.PrivateKey, ed25519.
 	}
 
 	return ed25519.PrivateKey(privKeyBytes), ed25519.PublicKey(pubKeyBytes), nil
-}
-
-func LimitSlice[T any](slice []T, maxLen int) []T {
-	if len(slice) > maxLen {
-		return slice[:maxLen]
-	}
-	return slice
-}
-
-func GetVisibleName(newUser *user_model.User) string {
-	nameMap := lo.Assign(
-		map[user_model.SelectedName]string{
-			user_model.Username: newUser.Username,
-		},
-		lo.OmitBy(map[user_model.SelectedName]string{
-			user_model.Username:  newUser.Username,
-			user_model.Firstname: lo.FromPtr(newUser.Firstname),
-			user_model.Lastname:  lo.FromPtr(newUser.Lastname),
-			user_model.Nickname:  lo.FromPtr(newUser.Nickname),
-		}, func(_ user_model.SelectedName, value string) bool {
-			return value == ""
-		}),
-	)
-
-	entry, found := lo.Find(lo.Entries(nameMap), func(entry lo.Entry[user_model.SelectedName, string]) bool {
-		return entry.Key == newUser.SelectedName
-	})
-
-	if found {
-		return entry.Value
-	}
-
-	return "none"
-}
-
-func FormatData[T any](service T) (string, error) {
-	jsonData, err := json.MarshalIndent(service, "", "  ")
-	if err != nil {
-		return "", fmt.Errorf("error marshaling JSON: %v", err)
-	}
-
-	return string(jsonData), nil
 }

@@ -7,10 +7,10 @@ import (
 	"github.com/go-playground/validator/v10"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
-	"github.com/root9464/Ton-students/config"
-	"github.com/root9464/Ton-students/database"
-	"github.com/root9464/Ton-students/shared/logger"
-	"github.com/root9464/Ton-students/shared/middleware"
+	"github.com/root9464/Hakaton_Zalupa/config"
+	"github.com/root9464/Hakaton_Zalupa/database"
+	"github.com/root9464/Hakaton_Zalupa/shared/logger"
+	"github.com/root9464/Hakaton_Zalupa/shared/middleware"
 	"gorm.io/gorm"
 )
 
@@ -110,7 +110,7 @@ func (app *App) initDb() error {
 
 		// true - запустить миграцию
 		// false - не запускать
-		if err := database.Migrate(db, true, app.logger); err != nil {
+		if err := database.Migrate(db, false, app.logger); err != nil {
 			return fmt.Errorf("%s", "✖ Failed to migrate database: "+err.Error())
 		}
 	}
@@ -163,9 +163,9 @@ func (app *App) runHttpServer() error {
 }
 
 func (app *App) initRouter() error {
-	// api := app.app.Group("/api")
+	api := app.app.Group("/api")
 
-	// app.moduleProvider.authModule.AuthRoutes(api)
+	app.moduleProvider.userModule.UserRoutes(api)
 
 	return nil
 }

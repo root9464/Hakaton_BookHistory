@@ -5,7 +5,7 @@ import (
 	"time"
 
 	"github.com/gofiber/fiber/v2"
-	"github.com/root9464/Ton-students/shared/logger"
+	"github.com/root9464/Hakaton_Zalupa/shared/logger"
 )
 
 func LoggerMiddleware() fiber.Handler {

@@ -1,4 +1,4 @@
-module github.com/root9464/Ton-students
+module github.com/root9464/Hakaton_Zalupa
 
 go 1.23.2
 

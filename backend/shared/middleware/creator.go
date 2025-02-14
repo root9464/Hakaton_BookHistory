@@ -7,10 +7,10 @@ import (
 	"regexp"
 
 	"github.com/gofiber/fiber/v2"
-	jwt_helpers "github.com/root9464/Ton-students/module/jwt/helpers"
-	user_model "github.com/root9464/Ton-students/module/user/model"
-	user_repository "github.com/root9464/Ton-students/module/user/repository"
-	"github.com/root9464/Ton-students/shared/logger"
+	jwt_helpers "github.com/root9464/Hakaton_Zalupa/module/jwt/helpers"
+	user_model "github.com/root9464/Hakaton_Zalupa/module/user/model"
+	user_repository "github.com/root9464/Hakaton_Zalupa/module/user/repository"
+	"github.com/root9464/Hakaton_Zalupa/shared/logger"
 )
 
 type Middleware struct {
@@ -36,10 +36,8 @@ func NewMiddleware(
 }
 
 var rolePriority = map[user_model.Role]int{
-	user_model.UserRole:    1,
-	user_model.CreatorRole: 2,
-	user_model.ModerRole:   3,
-	user_model.AdminRole:   4,
+	user_model.UserRole:  1,
+	user_model.AdminRole: 2,
 }
 
 var whitelist = map[string]*regexp.Regexp{
@@ -99,9 +97,9 @@ func (rm *Middleware) CreatorOnly() fiber.Handler {
 		}
 
 		rm.logger.Infof("User %d has role %s", userPayload.Sub, userPayload.Role)
-		if rolePriority[userPayload.Role] < rolePriority[user_model.CreatorRole] {
+		if rolePriority[userPayload.Role] < rolePriority[user_model.AdminRole] {
 			return ctx.Status(403).JSON(fiber.Map{
-				"error": "Only creator role is allowed",
+				"error": "Only admin role is allowed",
 			})
 		}
 		return ctx.Next()
