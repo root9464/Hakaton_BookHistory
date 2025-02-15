@@ -9,7 +9,7 @@ import (
 func (r *UserRepository) GetByID(ctx context.Context, id string) (*user_model.User, error) {
 	r.logger.Info("Getting user by id...")
 	var user user_model.User
-	if err := r.db.WithContext(ctx).Where("id = ?", id).First(&user).Error; err != nil {
+	if err := r.db.WithContext(ctx).Preload("Applications").Where("id = ?", id).First(&user).Error; err != nil {
 		r.logger.Errorf("Failed to get user by id: %v", err)
 		return nil, err
 	}

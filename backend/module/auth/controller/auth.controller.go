@@ -15,6 +15,7 @@ type IAuthController interface {
 	RefreshAccessToken(ctx *fiber.Ctx) error
 	JwtPing(ctx *fiber.Ctx) error
 	Register(ctx *fiber.Ctx) error
+	Logout(ctx *fiber.Ctx) error
 }
 
 type authController struct {

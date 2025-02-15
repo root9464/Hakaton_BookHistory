@@ -9,7 +9,7 @@ type UserData struct {
 
 type UserJwtPayload struct {
 	Iss  string          `json:"iss" validate:"required"`
-	Sub  int64           `json:"sub" validate:"required"`
+	Sub  string          `json:"sub" validate:"required"`
 	Iat  int64           `json:"iat" validate:"required"`
 	Exp  int64           `json:"exp" validate:"required"`
 	Role user_model.Role `json:"role" validate:"required"`
