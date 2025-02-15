@@ -18,6 +18,7 @@ type IApiService interface {
 	UpdateRecord(ctx context.Context, id string, dto *api_dto.CreateFeatureRequest) error
 
 	UploadAttachment(ctx context.Context, file *multipart.FileHeader, fileName string) ([]map[string]interface{}, error)
+	AttachingFile(ctx context.Context, recordID string, attachmentRequest api_dto.AttachmentRequest) (int, error)
 }
 
 type apiService struct {

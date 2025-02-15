@@ -137,3 +137,47 @@ func (c *ApiController) UploadAttachment(ctx *fiber.Ctx) error {
         "data":    uploadMeta,
     })
 }
+
+func (c *ApiController) AttachingFile(ctx *fiber.Ctx) error {
+    // Получаем ID записи из параметров запроса
+    recordID := ctx.Params("id")
+    if recordID == "" {
+        c.logger.Info("01")
+        return ctx.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+            "status":  "failed",
+            "message": "ID записи не указан",
+        })
+    }
+    
+
+    // Парсим тело запроса в DTO
+     attachmentRequest := (api_dto.AttachmentRequest{})
+    if err := ctx.BodyParser(&attachmentRequest); err != nil {
+        c.logger.Info("02")
+        return ctx.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+            "status":  "failed",
+            "message": err.Error(),
+        })
+    }
+
+    c.logger.Infof("AttachFileToRecord: RecordID=%s, Request=%+v", recordID, attachmentRequest)
+
+    // Вызываем метод сервиса для прикрепления файла
+    attachmentID, err := c.apiService.AttachingFile(ctx.Context(), recordID, attachmentRequest)
+    if err != nil {
+        c.logger.Info("03")
+        return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+            "status":  "failed",
+            "message": err.Error(),
+        })
+    }
+
+    // Возвращаем успешный ответ
+    return ctx.Status(fiber.StatusOK).JSON(fiber.Map{
+        "status":  "success",
+        "message": "file attached successfully",
+        "data": fiber.Map{
+            "id": attachmentID,
+        },
+    })
+}

@@ -23,8 +23,8 @@ type IApiController interface {
 	//Загрузка вложения для созданной записи
 	UploadAttachment(ctx *fiber.Ctx) error
 
-	// // Прикрепление файла к записи из пункта 3
-	// AttachingFile(ctx *fiber.Ctx) error
+	// Прикрепление файла к записи из пункта 3
+	AttachingFile(ctx *fiber.Ctx) error
 
 	// //Удаление вложения
 	// DeleteAttachment(ctx *fiber.Ctx) error

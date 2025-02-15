@@ -47,6 +47,7 @@ func (m *ApiModule) AuthRoutes(router fiber.Router) {
 	auth.Put("/update/:id", m.ApiController().UpadateRecord)
 
 	auth.Post("/upload", m.ApiController().UploadAttachment)
+	auth.Post("/attach/:id", m.ApiController().AttachingFile)
 
 	
 }

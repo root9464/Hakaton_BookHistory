@@ -298,6 +298,76 @@ func (s *apiService) UploadAttachment(ctx context.Context, file *multipart.FileH
 
 	return result["upload_meta"], nil
 }
+func (s *apiService) AttachingFile(ctx context.Context, recordID string, attachmentRequest api_dto.AttachmentRequest) (int, error) {
+	// Сериализуем запрос в JSON
+	jsonData, err := json.Marshal(attachmentRequest)
+	if err != nil {
+		s.logger.Infof("Ошибка при сериализации JSON: %s", err)
+		return 0, &fiber.Error{
+			Code:    fiber.StatusInternalServerError,
+			Message: err.Error(),
+		}
+	}
+
+	s.logger.Infof("Отправляемый JSON: %s", string(jsonData))
+
+	// Формируем URL для прикрепления файла
+	url := s.config.EXTERNAL_API + recordID + "/attachment/"
+	s.logger.Infof("URL: %s", url)
+
+	// Создаем HTTP-запрос
+	req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonData))
+	if err != nil {
+		s.logger.Infof("Ошибка при создании запроса: %s", err)
+		return 0, &fiber.Error{
+			Code:    fiber.StatusInternalServerError,
+			Message: err.Error(),
+		}
+	}
+
+	// Добавляем заголовки
+	req.Header.Set("Accept", "*/*")
+	req.Header.Set("Authorization", authString())
+	req.Header.Set("Content-Type", "application/json")
+
+	// Выполняем запрос
+	client := &http.Client{}
+	resp, err := client.Do(req)
+	if err != nil {
+		s.logger.Infof("Ошибка при выполнении запроса: %s", err)
+		return 0, &fiber.Error{
+			Code:    fiber.StatusInternalServerError,
+			Message: err.Error(),
+		}
+	}
+	defer resp.Body.Close()
+
+	// Читаем тело ответа
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		s.logger.Infof("Ошибка при чтении тела ответа: %s", err)
+		return 0, err
+	}
+
+	s.logger.Infof("Статус ответа: %s", resp.Status)
+	s.logger.Infof("Тело ответа: %s", string(body))
+
+	// Проверяем статус ответа
+	if resp.StatusCode >= 400 {
+		return 0, fmt.Errorf("ошибка сервера: %s, тело ответа: %s", resp.Status, string(body))
+	}
+
+	// Десериализуем ответ
+	var response struct {
+		ID int `json:"id"`
+	}
+	if err := json.Unmarshal(body, &response); err != nil {
+		s.logger.Infof("Ошибка при десериализации ответа: %s", err)
+		return 0, err
+	}
+
+	return response.ID, nil
+}
 
 func authString() string {
 	auth := "hackathon_15:hackathon_15_25"
