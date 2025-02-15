@@ -1,4 +1,4 @@
-import { PixelPosition } from '@/pages/MapPage';
+import { PixelPosition } from '../Module';
 
 type MarkerProps = {
   markers: PixelPosition[];
