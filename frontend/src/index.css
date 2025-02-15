@@ -6,6 +6,10 @@
 
   html,
   body {
+    /* -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+    pointer-events: none; */
     @apply scroll-smooth w-full min-h-screen h-auto bg-uiLightGray;
   }
 }

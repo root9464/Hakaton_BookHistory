@@ -1,3 +1,5 @@
+import { clsx, type ClassValue } from 'clsx';
+import { twMerge } from 'tailwind-merge';
 import { z, ZodError } from 'zod';
 
 export const validateResult = <T, U>(data: U, resType: z.ZodType<T>) => {
@@ -8,3 +10,7 @@ export const validateResult = <T, U>(data: U, resType: z.ZodType<T>) => {
     throw error;
   }
 };
+
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs));
+}

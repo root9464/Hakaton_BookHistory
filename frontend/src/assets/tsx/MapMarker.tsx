@@ -1,0 +1,17 @@
+import { motion } from 'framer-motion';
+
+export const MapMarker = ({ className }: { className?: string }) => (
+  <motion.svg
+    className={className}
+    viewBox='0 0 41 50'
+    fill='none'
+    xmlns='http://www.w3.org/2000/svg'
+    animate={{ y: [0, -10, 0] }}
+    transition={{ duration: 1.5, repeat: Infinity, repeatType: 'reverse', ease: 'easeInOut' }}
+  >
+    <path
+      d='M20.5 0C9.17817 0 0 9.17963 0 20.5C0 31.8204 16.1122 49.7847 20.5 49.7847C24.8862 49.7847 41 31.8204 41 20.5C41 9.17963 31.8219 0 20.5 0ZM20.5 29.9091C15.3025 29.9091 11.0909 25.6961 11.0909 20.5C11.0909 15.3025 15.3025 11.0909 20.5 11.0909C25.6961 11.0909 29.9091 15.3025 29.9091 20.5C29.9091 25.6961 25.6961 29.9091 20.5 29.9091Z'
+      fill='#231517'
+    />
+  </motion.svg>
+);
