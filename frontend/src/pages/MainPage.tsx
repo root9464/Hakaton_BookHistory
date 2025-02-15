@@ -100,7 +100,10 @@ export default function MainPage() {
 
 const Content: FC<{ children: React.ReactNode; className?: string } & HTMLMotionProps<'div'>> = ({ children, className, ...props }) => {
   return (
-    <motion.div className={cn(`rounded-[20px] bg-gradient-to-bl from-[#0F0D0D]/50 to-[#0F0D0D]/40 ${className}`)} {...props}>
+    <motion.div
+      className={cn(`rounded-[20px] bg-gradient-to-bl from-[#0F0D0D]/50 to-[#0F0D0D]/40 backdrop-blur-[15px] ${className}`)}
+      {...props}
+    >
       {children}
     </motion.div>
   );
