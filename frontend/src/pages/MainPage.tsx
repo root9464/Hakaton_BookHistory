@@ -1,6 +1,7 @@
 import MainBg from '@/assets/png/bg.png';
 import { MapMarker } from '@/assets/tsx/MapMarker';
 import { NavBar } from '@/components/NavBar';
+import { useWindow } from '@/shared/hooks/useWindow';
 import { cn } from '@/shared/utils/utils';
 import { Link } from '@tanstack/react-router';
 import { HTMLMotionProps, motion } from 'framer-motion';
@@ -21,6 +22,7 @@ const INTERESTING_FACTS = [
 ];
 
 export default function MainPage() {
+  const { width } = useWindow();
   const [currentFactIndex, setCurrentFactIndex] = useState<number | null>(null);
 
   useEffect(() => {
@@ -38,15 +40,15 @@ export default function MainPage() {
   }, []);
 
   return (
-    <div className='relative flex h-screen w-full items-center justify-center overflow-x-hidden bg-red-700/35'>
+    <div className='relative flex h-screen w-full items-center justify-center overflow-x-hidden'>
       <img className='z-0 h-full w-full object-cover' src={MainBg} alt='svo frame' />
 
       <div className='absolute top-0 z-[1] h-full w-full bg-transparent'>
-        <div className='relative h-full w-full bg-transparent px-5 pt-20'>
+        <div className='relative h-full w-full bg-transparent px-2 pt-20 md:px-5'>
           <NavBar />
           <div className='relative mt-24 flex h-max w-fit flex-col items-center justify-center gap-5'>
             <Content
-              className='w-[690px] px-4 py-2.5 text-white'
+              className='w-full px-4 py-2.5 text-white md:w-[690px]'
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
@@ -58,7 +60,7 @@ export default function MainPage() {
               </p>
             </Content>
             <Content
-              className='w-[690px] px-4 py-2.5 text-white'
+              className='w-f px-4 py-2.5 text-white md:w-[690px]'
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.2 }}
@@ -72,7 +74,7 @@ export default function MainPage() {
             {currentFactIndex !== null && (
               <Content
                 key={currentFactIndex}
-                className='w-[690px] px-4 py-2.5 text-white'
+                className='w-f px-4 py-2.5 text-white md:w-[690px]'
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: 20 }}
@@ -83,8 +85,8 @@ export default function MainPage() {
             )}
           </div>
 
-          {window.innerWidth >= 1980 && (
-            <Link to='/register' className='absolute right-[25%] top-[56%] flex h-[100px] w-[100px] items-end justify-center bg-transparent'>
+          {width >= 1080 && (
+            <Link to='/map' className='absolute right-[25%] top-[56%] flex h-[100px] w-[100px] items-end justify-center bg-transparent'>
               <MapMarker className='h-10 w-10' />
             </Link>
           )}
