@@ -5,8 +5,10 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"math"
 	"net/http"
 	"strconv"
+	"strings"
 
 	"github.com/gofiber/fiber/v2"
 
@@ -57,6 +59,18 @@ func (s *apiService) GetRecord(ctx context.Context) ([]api_dto.Feature, error) {
 		return nil, err
 	}
 
+	// Конвертация координат geom в EPSG:3857
+	for i, feature := range features {
+		if feature.Geom != "" {
+			convertedGeom, err := convertEPSG3857to4326(feature.Geom)
+			if err != nil {
+				s.logger.Infof("Ошибка при конвертации geom: %s", err)
+				return nil, err
+			}
+			features[i].Geom = convertedGeom
+		}
+	}
+
 	return features, nil
 }
 
@@ -72,7 +86,6 @@ func (s *apiService) GetRecordByID(ctx context.Context, id string) (*api_dto.Fea
 
 	req.Header.Set("Accept", "*/*")
 	req.Header.Set("Authorization", authString())
-
 	client := &http.Client{}
 	resp, err := client.Do(req)
 	if err != nil {
@@ -97,7 +110,6 @@ func (s *apiService) GetRecordByID(ctx context.Context, id string) (*api_dto.Fea
 		return nil, fmt.Errorf("ошибка сервера: %s, тело ответа: %s", resp.Status, string(body))
 	}
 
-	// Десериализация JSON-ответа в массив объектов
 	var features []api_dto.Feature
 	err = json.Unmarshal(body, &features)
 	if err != nil {
@@ -105,16 +117,44 @@ func (s *apiService) GetRecordByID(ctx context.Context, id string) (*api_dto.Fea
 		return nil, err
 	}
 
-	// Поиск нужной записи по ID
 	for _, record := range features {
 		if strconv.Itoa(record.ID) == id {
+			// Конвертация координат
+			coords, err := convertEPSG3857to4326(record.Geom)
+			if err != nil {
+				return nil, err
+			}
+			record.Geom = coords
 			return &record, nil
 		}
 	}
 
-	// Если запись не найдена
 	return nil, &fiber.Error{
 		Code:    fiber.StatusNotFound,
 		Message: fmt.Sprintf("Запись с ID %s не найдена", id),
 	}
+}
+
+func convertEPSG3857to4326(geom string) (string, error) {
+	geom = strings.TrimPrefix(geom, "POINT(")
+	geom = strings.TrimSuffix(geom, ")")
+	coords := strings.Split(geom, " ")
+	if len(coords) != 2 {
+		return "", fmt.Errorf("неверный формат координат: %s", geom)
+	}
+
+	x, err := strconv.ParseFloat(coords[0], 64)
+	if err != nil {
+		return "", err
+	}
+	y, err := strconv.ParseFloat(coords[1], 64)
+	if err != nil {
+		return "", err
+	}
+
+	// EPSG:3857 to EPSG:4326
+	lon := x / 6378137.0 * 180.0
+	lat := (2*math.Atan(math.Exp(y/6378137.0*math.Pi/180.0)) - math.Pi/2) * 180.0 / math.Pi
+
+	return fmt.Sprintf("POINT(%f %f)", lon, lat), nil
 }
