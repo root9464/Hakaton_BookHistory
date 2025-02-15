@@ -40,9 +40,7 @@ export const MapModule = () => {
     const worldY = centerPixel.y + offsetY;
 
     const { x, y } = toEPSG3857Direct(worldX, worldY, zoom);
-
     const stringCoord = `POINT (${x} ${y})`;
-
     console.log('Клик по карте', stringCoord);
   };
 
