@@ -10,11 +10,7 @@ func (c *ApiController) GetRecord(ctx *fiber.Ctx) error {
 			"message": err.Error(),
 		})
 	}
-	return ctx.Status(fiber.StatusCreated).JSON(fiber.Map{
-		"data": fiber.Map{
-			"result": resp,
-		},
-	})
+	return ctx.Status(fiber.StatusOK).JSON(resp)
 }
 
 func (c *ApiController) GetRecordByID(ctx *fiber.Ctx) error {
