@@ -1,9 +1,11 @@
-import { Admin } from './components/admin';
+import { AplicationForm } from "./components/aplicationForm";
+import { OrderForm } from "./components/OrderForm";
 
 export const AdminModule = () => {
-    return (
-        <div className='relative flex h-screen w-[60%] flex-col items-center justify-center gap-5 rounded-r-[40px] bg-white'>
-            <Admin />
-        </div>
-    );
+  return (
+    <div className='flex gap-[50px]'>
+      <OrderForm />
+      <AplicationForm />
+    </div>
+  );
 };

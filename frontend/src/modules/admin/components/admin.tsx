@@ -1,8 +1,6 @@
 // import { useAtom } from 'jotai';
 // import { usersAtom, applicationsAtom, User, Application } from '@/store/atom';
 // import { v4 as uuidv4 } from 'uuid';
-import { AplicationForm } from './aplicationForm';
-import { OrderForm } from './OrderForm';
 
 export const Admin = () => {
   // const [users, setUsers] = useAtom(usersAtom);
@@ -58,10 +56,5 @@ export const Admin = () => {
   //   setApplications(updatedApplications);
   // };
 
-  return (
-    <div className='flex gap-[50px]'>
-      <OrderForm />
-      <AplicationForm />
-    </div>
-  );
+
 };
