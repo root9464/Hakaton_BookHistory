@@ -3,6 +3,9 @@ package database
 import (
 	file_model "github.com/root9464/Hakaton_BookHistory/module/file/model"
 	user_model "github.com/root9464/Hakaton_BookHistory/module/user/model"
+
+	application_model "github.com/root9464/Hakaton_BookHistory/module/application/model"
+	reward_model "github.com/root9464/Hakaton_BookHistory/module/reward/model"
 	"github.com/root9464/Hakaton_BookHistory/shared/logger"
 	"gorm.io/gorm"
 )
@@ -14,7 +17,11 @@ func Migrate(db *gorm.DB, trigger bool, log *logger.Logger) error {
 		models := []interface{}{
 			&user_model.User{},
 			&file_model.File{},
+			&application_model.Application{},
+			&reward_model.Reward{},
 		}
+
+		log.Info("📦 Creating types...")
 
 		db.Exec("CREATE EXTENSION IF NOT EXISTS \"uuid-ossp\"")
 		db.Exec("CREATE TYPE role AS ENUM('administarator', 'user')")
