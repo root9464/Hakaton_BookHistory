@@ -1569,7 +1569,7 @@
     "@react-types/textfield" "3.10.0"
     input-otp "1.4.1"
 
-"@heroui/input@2.4.10":
+"@heroui/input@2.4.10", "@heroui/input@^2.4.10":
   version "2.4.10"
   resolved "https://registry.yarnpkg.com/@heroui/input/-/input-2.4.10.tgz#1771c2d7625f96ebd226f18ee0c30ca33ff6f6b3"
   integrity sha512-cHKgDiNq6ppe71epBqpiaHxH8CbIZ9uPTvzSEgSsYaDhI6vos7fNAUkpLwQyp8yAPOQBHO4RHSYDKYTOhyGsIg==

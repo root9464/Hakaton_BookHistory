@@ -17,7 +17,7 @@ export const useOrder = () =>
   useMutation({
     mutationKey: ['order'],
     mutationFn: async (orderData: OrderFormData) => {
-      const { data, status, statusText } = await axios.post<UserOrderResponse>('/api/reward', orderData);
+      const { data, status, statusText } = await axios.post<UserOrderResponse>('http://127.0.0.1:6069/api/reward', orderData);
       if (status !== 200) {
         throw new Error(`${status}: ${statusText}`);
       }
