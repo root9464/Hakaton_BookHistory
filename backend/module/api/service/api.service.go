@@ -13,7 +13,7 @@ var _ IApiService = (*apiService)(nil)
 
 type IApiService interface {
 	CreateRecord(ctx context.Context, dto *api_dto.CreateFeatureRequest) (*api_dto.CreateFeatureResponse, error)
-	GetRecord(ctx context.Context) ([]api_dto.Feature, error)
+	GetRecord(ctx context.Context) ([]UserResponse, error)
 	GetRecordByID(ctx context.Context, id string) (map[string]interface{}, error)
 	DeleteRecord(ctx context.Context, ids []api_dto.CreateFeatureResponse) error
 	UpdateRecord(ctx context.Context, id string, dto *api_dto.CreateFeatureRequest) error
