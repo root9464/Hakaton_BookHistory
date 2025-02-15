@@ -2,6 +2,7 @@ package api_service
 
 import (
 	"context"
+	"mime/multipart"
 
 	"github.com/root9464/Hakaton_Zalupa/config"
 	api_dto "github.com/root9464/Hakaton_Zalupa/module/api/dto"
@@ -15,6 +16,8 @@ type IApiService interface {
 	GetRecord(ctx context.Context) ([]api_dto.Feature, error)
 	DeleteRecord(ctx context.Context, ids []api_dto.CreateFeatureResponse) error
 	UpdateRecord(ctx context.Context, id string, dto *api_dto.CreateFeatureRequest) error
+
+	UploadAttachment(ctx context.Context, file *multipart.FileHeader, fileName string) ([]map[string]interface{}, error)
 }
 
 type apiService struct {

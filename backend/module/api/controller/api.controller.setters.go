@@ -71,8 +71,6 @@ func (c *ApiController) UpadateRecord(ctx *fiber.Ctx) error {
         "message": "record updated successfully",
     })
 }
-
-
 func (c *ApiController) DeleteRecord(ctx *fiber.Ctx) error {
     // Парсим тело запроса в массив ID
     var ids []api_dto.CreateFeatureResponse
@@ -100,5 +98,42 @@ func (c *ApiController) DeleteRecord(ctx *fiber.Ctx) error {
     return ctx.Status(fiber.StatusOK).JSON(fiber.Map{
         "status":  "success",
         "message": "records deleted successfully",
+    })
+}
+
+func (c *ApiController) UploadAttachment(ctx *fiber.Ctx) error {
+    // Получаем файл из запроса
+    file, err := ctx.FormFile("file")
+    if err != nil {
+        c.logger.Info("01")
+        return ctx.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+            "status":  "failed",
+            "message": err.Error(),
+        })
+    }
+
+    // Получаем имя файла (если передано)
+    fileName := ctx.FormValue("name")
+    if fileName == "" {
+        fileName = file.Filename // Используем имя файла по умолчанию
+    }
+
+    c.logger.Infof("UploadAttachment: FileName=%s, Size=%d", fileName, file.Size)
+
+    // Вызываем метод сервиса для загрузки файла
+    uploadMeta, err := c.apiService.UploadAttachment(ctx.Context(), file, fileName)
+    if err != nil {
+        c.logger.Info("02")
+        return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+            "status":  "failed",
+            "message": err.Error(),
+        })
+    }
+
+    // Возвращаем успешный ответ
+    return ctx.Status(fiber.StatusOK).JSON(fiber.Map{
+        "status":  "success",
+        "message": "file uploaded successfully",
+        "data":    uploadMeta,
     })
 }

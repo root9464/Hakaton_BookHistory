@@ -21,7 +21,7 @@ type IApiController interface {
 	UpadateRecord(ctx *fiber.Ctx) error
 
 	//Загрузка вложения для созданной записи
-	// AploadAttachment(ctx *fiber.Ctx) error
+	UploadAttachment(ctx *fiber.Ctx) error
 
 	// // Прикрепление файла к записи из пункта 3
 	// AttachingFile(ctx *fiber.Ctx) error
