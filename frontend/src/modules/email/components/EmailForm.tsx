@@ -7,6 +7,11 @@ import { Textarea } from '@heroui/input';
 const FormShema = z.object({
   email: z.string().email('Некорректный email'),
   description: z.string().min(1, 'Имя обязательно для заполнения'),
+  password: z
+    .string()
+    .min(8, 'Пароль должен содержать минимум 8 символов')
+    .regex(/[A-Z]/, 'Пароль должен содержать хотя бы одну заглавную букву')
+    .regex(/[0-9]/, 'Пароль должен содержать хотя бы одну цифру'),
 });
 
 type FormData = z.infer<typeof FormShema>;
@@ -21,6 +26,7 @@ export const EmailForm = () => {
     defaultValues: {
       email: '',
       description: '',
+      password: '',
     },
   });
 
@@ -36,6 +42,15 @@ export const EmailForm = () => {
         color='warning'
         errorMessage={errors.email?.message}
         isInvalid={!!errors.email}
+      />
+      <Input
+        {...register('password')}
+        label='Password'
+        placeholder='Введите password'
+        className='h-12 w-[315px]'
+        color='warning'
+        errorMessage={errors.password?.message}
+        isInvalid={!!errors.password}
       />
       <Textarea
         className='max-w-xs'
