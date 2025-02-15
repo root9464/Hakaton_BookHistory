@@ -1,5 +1,5 @@
 import { validateResult } from '@/shared/utils/utils';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
 import { z } from 'zod';
 import { LoginFormData } from '../components/LoginForm';
@@ -47,10 +47,12 @@ const _UserLoginSchema = z.object({
   token: TokenSchema,
 });
 
-type UserLoginResponse = z.infer<typeof _UserLoginSchema>;
+export type UserLoginResponse = z.infer<typeof _UserLoginSchema>;
 
-export const useLogin = () =>
-  useMutation({
+export const useLogin = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
     mutationKey: ['login'],
     mutationFn: async (userData: LoginFormData) => {
       const { data, status, statusText } = await axios.post<UserLoginResponse>('/api/auth/authorize', userData);
@@ -59,4 +61,9 @@ export const useLogin = () =>
       }
       return validateResult(data, _UserLoginSchema);
     },
+
+    onSuccess: (data) => {
+      queryClient.setQueryData(['user'], data);
+    },
   });
+};
