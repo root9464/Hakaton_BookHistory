@@ -8,7 +8,7 @@ import (
 
 func (r *ApplicationRepository) GetAll(ctx context.Context) ([]application_model.Application, error) {
 	var applications []application_model.Application
-	if err := r.db.Find(&applications).Error; err != nil {
+	if err := r.db.Preload("Files").Find(&applications).Error; err != nil {
 		r.logger.Errorf("error getting applications: %v", err)
 		return nil, err
 	}

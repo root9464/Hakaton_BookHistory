@@ -37,3 +37,26 @@ func (c *ApplicationController) Create(ctx *fiber.Ctx) error {
 		"message": "Application created successfully",
 	})
 }
+
+func (c *ApplicationController) UpdateStatus(ctx *fiber.Ctx) error {
+	id := ctx.Params("id")
+	status := new(application_dto.UpdateStatus)
+	if err := ctx.BodyParser(status); err != nil {
+		c.logger.Errorf("error parsing body: %v", err)
+		return &fiber.Error{
+			Code:    400,
+			Message: err.Error(),
+		}
+	}
+
+	if err := c.applicationServ.UpdateStatus(ctx.Context(), id, status); err != nil {
+		c.logger.Errorf("error updating application: %v", err)
+		if errorResponse, code := utils.HandlerError(err); errorResponse != nil {
+			return ctx.Status(code).JSON(errorResponse)
+		}
+	}
+	return ctx.Status(200).JSON(fiber.Map{
+		"status":  "success",
+		"message": "Application updated successfully",
+	})
+}

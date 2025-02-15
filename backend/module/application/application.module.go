@@ -58,4 +58,5 @@ func (m *ApplicationModule) ApplicationRoutes(router fiber.Router) {
 	application := router.Group("/application")
 	application.Post("/", m.ApplicationController().Create)
 	application.Get("/", m.ApplicationController().GetAll)
+	application.Put("/:id", m.ApplicationController().UpdateStatus)
 }

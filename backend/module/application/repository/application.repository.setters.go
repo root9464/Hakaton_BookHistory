@@ -15,3 +15,15 @@ func (r *ApplicationRepository) Create(ctx context.Context, applications *applic
 	r.logger.Info("application created")
 	return nil
 }
+
+func (r *ApplicationRepository) Update(ctx context.Context, application *application_model.Application) error {
+	r.logger.Info("updating application...")
+
+	if err := r.db.Model(&application).Where("id = ?", application.ID).Updates(application).Error; err != nil {
+		r.logger.Errorf("error updating application: %v", err)
+		return err
+	}
+
+	r.logger.Info("application updated")
+	return nil
+}

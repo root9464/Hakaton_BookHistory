@@ -12,3 +12,7 @@ type CreateApplicationDto struct {
 	BurialPlace                 string `form:"burial_place"`
 	BiographicalFacts           string `form:"biographical_facts"`
 }
+
+type UpdateStatus struct {
+	Status string `json:"status" validate:"required,oneof=draft published"`
+}

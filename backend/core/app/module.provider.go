@@ -5,6 +5,7 @@ import (
 	auth_module "github.com/root9464/Hakaton_Zalupa/module/auth"
 	file_module "github.com/root9464/Hakaton_Zalupa/module/file"
 	jwt_module "github.com/root9464/Hakaton_Zalupa/module/jwt"
+	reward_module "github.com/root9464/Hakaton_Zalupa/module/reward"
 	user_module "github.com/root9464/Hakaton_Zalupa/module/user"
 )
 
@@ -16,6 +17,7 @@ type moduleProvider struct {
 	jwtModule         *jwt_module.JwtModule
 	fileModule        *file_module.FileModule
 	applicationModule *application_module.ApplicationModule
+	rewardModule      *reward_module.RewardModule
 
 	app *App
 }
@@ -39,6 +41,7 @@ func (p *moduleProvider) initDeps() error {
 		p.AuthModule,
 		p.FileModule,
 		p.ApplicationModule,
+		p.RewardModule,
 	}
 	for _, init := range inits {
 		err := init()
@@ -72,5 +75,10 @@ func (p *moduleProvider) FileModule() error {
 
 func (p *moduleProvider) ApplicationModule() error {
 	p.applicationModule = application_module.NewApplicationModule(p.app.logger, p.app.db, p.fileModule.FileService())
+	return nil
+}
+
+func (p *moduleProvider) RewardModule() error {
+	p.rewardModule = reward_module.NewRewardModule(p.app.logger, p.app.validator, p.app.db, p.fileModule.FileService())
 	return nil
 }

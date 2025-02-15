@@ -11,7 +11,7 @@ import (
 var _ IFileService = (*FileService)(nil)
 
 type IFileService interface {
-	CreateMany(ctx context.Context, files *file_dto.CreateManyFileDto) error
+	CreateMany(ctx context.Context, files *file_dto.CreateManyFileDto) ([]string, error)
 }
 type FileService struct {
 	repo   file_repository.IFileRepository
