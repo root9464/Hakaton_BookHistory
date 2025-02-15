@@ -12,19 +12,19 @@ var _ IApiService = (*apiService)(nil)
 
 type IApiService interface {
 	CreateRecord(ctx context.Context, dto *api_dto.CreateFeatureRequest) (*api_dto.CreateFeatureResponse, error)
+	GetRecord(ctx context.Context) ([]api_dto.Feature, error)
+	DeleteRecord(ctx context.Context, ids []api_dto.CreateFeatureResponse) error
+	UpdateRecord(ctx context.Context, id string, dto *api_dto.CreateFeatureRequest) error
 }
 
 type apiService struct {
 	logger *logger.Logger
 	config *config.Config
-
-	
 }
 
 func NewApiService(logger *logger.Logger, config *config.Config) *apiService {
 	return &apiService{
-		logger:     logger,
-		config:     config,
+		logger: logger,
+		config: config,
 	}
 }
-

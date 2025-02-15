@@ -14,17 +14,17 @@ type IApiController interface {
 	// //Запрос информации по записи
 	GetRecord(ctx *fiber.Ctx) error
 
+	// //Удаление записи
+	DeleteRecord(ctx *fiber.Ctx) error
+
+	// //Изменение записи
+	UpadateRecord(ctx *fiber.Ctx) error
+
 	//Загрузка вложения для созданной записи
 	// AploadAttachment(ctx *fiber.Ctx) error
 
 	// // Прикрепление файла к записи из пункта 3
 	// AttachingFile(ctx *fiber.Ctx) error
-
-	// //Изменение записи
-	// ChangeRecord(ctx *fiber.Ctx) error
-
-	// //Удаление записи
-	// DeleteRecord(ctx *fiber.Ctx) error
 
 	// //Удаление вложения
 	// DeleteAttachment(ctx *fiber.Ctx) error
