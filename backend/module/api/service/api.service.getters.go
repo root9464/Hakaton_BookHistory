@@ -74,7 +74,15 @@ func (s *apiService) GetRecord(ctx context.Context) ([]api_dto.Feature, error) {
 	return features, nil
 }
 
-func (s *apiService) GetRecordByID(ctx context.Context, id string) (*api_dto.Feature, error) {
+type UserResponse struct {
+	UserID string `json:"userID"`
+	Coords struct {
+		Lat float64 `json:"lat"`
+		Lon float64 `json:"lon"`
+	} `json:"cords"`
+}
+
+func (s *apiService) GetRecordByID(ctx context.Context, id string) (map[string]interface{}, error) {
 	req, err := http.NewRequest("GET", s.config.EXTERNAL_API, nil)
 	if err != nil {
 		s.logger.Infof("Ошибка при создании запроса: %s", err)
@@ -124,8 +132,31 @@ func (s *apiService) GetRecordByID(ctx context.Context, id string) (*api_dto.Fea
 			if err != nil {
 				return nil, err
 			}
-			record.Geom = coords
-			return &record, nil
+
+			// Разбираем координаты
+			var lon, lat float64
+			coords = strings.TrimPrefix(coords, "POINT(")
+			coords = strings.TrimSuffix(coords, ")")
+			parts := strings.Split(coords, " ")
+			if len(parts) != 2 {
+				return nil, fmt.Errorf("неверный формат координат: %s", coords)
+			}
+			lon, err = strconv.ParseFloat(parts[0], 64)
+			if err != nil {
+				return nil, fmt.Errorf("ошибка при парсинге долготы: %s", err)
+			}
+			lat, err = strconv.ParseFloat(parts[1], 64)
+			if err != nil {
+				return nil, fmt.Errorf("ошибка при парсинге широты: %s", err)
+			}
+
+			return map[string]interface{}{
+				"userID": record.ID,
+				"cords": map[string]float64{
+					"lat": lat,
+					"lon": lon,
+				},
+			}, nil
 		}
 	}
 
@@ -134,6 +165,7 @@ func (s *apiService) GetRecordByID(ctx context.Context, id string) (*api_dto.Fea
 		Message: fmt.Sprintf("Запись с ID %s не найдена", id),
 	}
 }
+
 
 func convertEPSG3857to4326(geom string) (string, error) {
 	geom = strings.TrimPrefix(geom, "POINT(")

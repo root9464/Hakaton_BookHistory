@@ -26,11 +26,7 @@ func (c *ApiController) GetRecordByID(ctx *fiber.Ctx) error {
 		})
 	}
 
-	return ctx.Status(fiber.StatusOK).JSON(fiber.Map{
-		"data": fiber.Map{
-			"result": resp,
-		},
-	})
+	return ctx.Status(fiber.StatusOK).JSON(resp)
 }
 
 

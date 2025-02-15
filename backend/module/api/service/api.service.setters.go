@@ -192,111 +192,121 @@ func (s *apiService) UpdateRecord(ctx context.Context, id string, dto *api_dto.C
 }
 
 func (s *apiService) UploadAttachment(ctx context.Context, file *multipart.FileHeader, fileName string) ([]map[string]interface{}, error) {
-	// Открываем файл
-	src, err := file.Open()
-	if err != nil {
-		s.logger.Infof("Ошибка при открытии файла: %s", err)
-		return nil, &fiber.Error{
-			Code:    fiber.StatusInternalServerError,
-			Message: err.Error(),
-		}
-	}
-	defer src.Close()
+    // Открываем файл
+    src, err := file.Open()
+    if err != nil {
+        s.logger.Infof("Ошибка при открытии файла: %s", err)
+        return nil, &fiber.Error{
+            Code:    fiber.StatusInternalServerError,
+            Message: err.Error(),
+        }
+    }
+    defer src.Close()
 
-	// Создаем буфер для хранения данных файла
-	body := &bytes.Buffer{}
-	writer := multipart.NewWriter(body)
+    // Создаем буфер для хранения данных файла
+    body := &bytes.Buffer{}
+    writer := multipart.NewWriter(body)
 
-	// Добавляем файл в форму
-	part, err := writer.CreateFormFile("file", fileName)
-	if err != nil {
-		s.logger.Infof("Ошибка при создании формы для файла: %s", err)
-		return nil, &fiber.Error{
-			Code:    fiber.StatusInternalServerError,
-			Message: err.Error(),
-		}
-	}
+    // Добавляем файл в форму
+    part, err := writer.CreateFormFile("file", fileName)
+    if err != nil {
+        s.logger.Infof("Ошибка при создании формы для файла: %s", err)
+        return nil, &fiber.Error{
+            Code:    fiber.StatusInternalServerError,
+            Message: err.Error(),
+        }
+    }
 
-	// Копируем содержимое файла в часть формы
-	if _, err := io.Copy(part, src); err != nil {
-		s.logger.Infof("Ошибка при копировании файла: %s", err)
-		return nil, &fiber.Error{
-			Code:    fiber.StatusInternalServerError,
-			Message: err.Error(),
-		}
-	}
+    // Копируем содержимое файла в часть формы
+    if _, err := io.Copy(part, src); err != nil {
+        s.logger.Infof("Ошибка при копировании файла: %s", err)
+        return nil, &fiber.Error{
+            Code:    fiber.StatusInternalServerError,
+            Message: err.Error(),
+        }
+    }
 
-	// Добавляем поле "name" (если нужно)
-	if err := writer.WriteField("name", fileName); err != nil {
-		s.logger.Infof("Ошибка при добавлении поля name: %s", err)
-		return nil, &fiber.Error{
-			Code:    fiber.StatusInternalServerError,
-			Message: err.Error(),
-		}
-	}
+    // Добавляем поле "name" (если нужно)
+    if err := writer.WriteField("name", fileName); err != nil {
+        s.logger.Infof("Ошибка при добавлении поля name: %s", err)
+        return nil, &fiber.Error{
+            Code:    fiber.StatusInternalServerError,
+            Message: err.Error(),
+        }
+    }
 
-	// Закрываем writer
-	if err := writer.Close(); err != nil {
-		s.logger.Infof("Ошибка при закрытии writer: %s", err)
-		return nil, &fiber.Error{
-			Code:    fiber.StatusInternalServerError,
-			Message: err.Error(),
-		}
-	}
+    // Добавляем поле "mime_type"
+    fileType := file.Header.Get("Content-Type")
+    if err := writer.WriteField("mime_type", fileType); err != nil {
+        s.logger.Infof("Ошибка при добавлении поля mime_type: %s", err)
+        return nil, &fiber.Error{
+            Code:    fiber.StatusInternalServerError,
+            Message: err.Error(),
+        }
+    }
 
-	// Формируем URL для загрузки файла
-	url := "https://geois2.orb.ru/api/component/file_upload/"
+    // Закрываем writer
+    if err := writer.Close(); err != nil {
+        s.logger.Infof("Ошибка при закрытии writer: %s", err)
+        return nil, &fiber.Error{
+            Code:    fiber.StatusInternalServerError,
+            Message: err.Error(),
+        }
+    }
 
-	// Создаем HTTP-запрос
-	req, err := http.NewRequest("POST", url, body)
-	if err != nil {
-		s.logger.Infof("Ошибка при создании запроса: %s", err)
-		return nil, &fiber.Error{
-			Code:    fiber.StatusInternalServerError,
-			Message: err.Error(),
-		}
-	}
+    // Формируем URL для загрузки файла
+    url := "https://geois2.orb.ru/api/component/file_upload/"
 
-	// Добавляем заголовки
-	req.Header.Set("Accept", "*/*")
-	req.Header.Set("Authorization", authString())
-	req.Header.Set("Content-Type", writer.FormDataContentType())
+    // Создаем HTTP-запрос
+    req, err := http.NewRequest("POST", url, body)
+    if err != nil {
+        s.logger.Infof("Ошибка при создании запроса: %s", err)
+        return nil, &fiber.Error{
+            Code:    fiber.StatusInternalServerError,
+            Message: err.Error(),
+        }
+    }
 
-	// Выполняем запрос
-	client := &http.Client{}
-	resp, err := client.Do(req)
-	if err != nil {
-		s.logger.Infof("Ошибка при выполнении запроса: %s", err)
-		return nil, &fiber.Error{
-			Code:    fiber.StatusInternalServerError,
-			Message: err.Error(),
-		}
-	}
-	defer resp.Body.Close()
+    // Добавляем заголовки
+    req.Header.Set("Accept", "*/*")
+    req.Header.Set("Authorization", authString())
+    req.Header.Set("Content-Type", writer.FormDataContentType())
 
-	// Читаем тело ответа
-	responseBody, err := io.ReadAll(resp.Body)
-	if err != nil {
-		s.logger.Infof("Ошибка при чтении тела ответа: %s", err)
-		return nil, err
-	}
+    // Выполняем запрос
+    client := &http.Client{}
+    resp, err := client.Do(req)
+    if err != nil {
+        s.logger.Infof("Ошибка при выполнении запроса: %s", err)
+        return nil, &fiber.Error{
+            Code:    fiber.StatusInternalServerError,
+            Message: err.Error(),
+        }
+    }
+    defer resp.Body.Close()
 
-	s.logger.Infof("Статус ответа: %s", resp.Status)
-	s.logger.Infof("Тело ответа: %s", string(responseBody))
+    // Читаем тело ответа
+    responseBody, err := io.ReadAll(resp.Body)
+    if err != nil {
+        s.logger.Infof("Ошибка при чтении тела ответа: %s", err)
+        return nil, err
+    }
 
-	// Проверяем статус ответа
-	if resp.StatusCode >= 400 {
-		return nil, fmt.Errorf("ошибка сервера: %s, тело ответа: %s", resp.Status, string(responseBody))
-	}
+    s.logger.Infof("Статус ответа: %s", resp.Status)
+    s.logger.Infof("Тело ответа: %s", string(responseBody))
 
-	// Десериализуем ответ
-	var result map[string][]map[string]interface{}
-	if err := json.Unmarshal(responseBody, &result); err != nil {
-		s.logger.Infof("Ошибка при десериализации ответа: %s", err)
-		return nil, err
-	}
+    // Проверяем статус ответа
+    if resp.StatusCode >= 400 {
+        return nil, fmt.Errorf("ошибка сервера: %s, тело ответа: %s", resp.Status, string(responseBody))
+    }
 
-	return result["upload_meta"], nil
+    // Десериализуем ответ
+    var result map[string][]map[string]interface{}
+    if err := json.Unmarshal(responseBody, &result); err != nil {
+        s.logger.Infof("Ошибка при десериализации ответа: %s", err)
+        return nil, err
+    }
+
+    return result["upload_meta"], nil
 }
 func (s *apiService) AttachingFile(ctx context.Context, recordID string, attachmentRequest api_dto.AttachmentRequest) (int, error) {
 	// Сериализуем запрос в JSON
