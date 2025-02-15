@@ -11,16 +11,8 @@ export const Marker = ({ handleMarkerClick, markers }: MarkerProps) => {
       {markers.map((position, index) => (
         <div
           key={index}
-          className='absolute animate-pulse cursor-pointer'
-          style={{
-            left: position.x - 12,
-            top: position.y - 12,
-            width: '24px',
-            height: '24px',
-            background: 'radial-gradient(circle, #ff0000 40%, #ff000080 70%, #ff000020 100%)',
-            borderRadius: '50%',
-            zIndex: 10,
-          }}
+          className='absolute z-[1] h-6 w-6 animate-pulse cursor-pointer rounded-full bg-red-500'
+          style={{ left: position.x - 12, top: position.y - 12 }}
           onClick={() => handleMarkerClick(index)}
         />
       ))}

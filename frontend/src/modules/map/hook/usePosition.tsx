@@ -1,14 +1,6 @@
 import { RefObject, useEffect, useState } from 'react';
 import { PixelPosition, Point } from '../Module';
-
-const project = (lat: number, lon: number, zoom: number) => {
-  const scale = 1 << zoom;
-  const worldSize = 256 * scale;
-  const x = ((lon + 180) * worldSize) / 360;
-  const siny = Math.sin((lat * Math.PI) / 180);
-  const y = (0.5 - Math.log((1 + siny) / (1 - siny)) / (4 * Math.PI)) * worldSize;
-  return { x, y };
-};
+import { project } from '../utils/utils';
 
 export const useMarkerPositions = (containerRef: RefObject<HTMLElement | null>, points: Point[], center: Point, zoom: number) => {
   const [markers, setMarkers] = useState<PixelPosition[]>([]);

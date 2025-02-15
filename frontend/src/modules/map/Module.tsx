@@ -1,33 +1,56 @@
+import { useWindow } from '@/shared/hooks/useWindow';
 import { useRef } from 'react';
 import { Marker } from './components/Marker';
 import { useMarkerPositions } from './hook/usePosition';
+import { project, toEPSG3857Direct } from './utils/utils';
 
 export type Point = { lat: number; lon: number };
 export type PixelPosition = { x: number; y: number };
 
-const zoom = 10;
 const center: Point = { lat: 52.3898, lon: 56.0525 };
 
-const points: Point[] = [
-  { lat: 52.335844, lon: 56.24909 },
-  { lat: 52.278163, lon: 55.952936 },
-  { lat: 52.277743, lon: 56.196009 },
-];
+const points: Point[] = [{ lon: 56.24544738769535, lat: 52.307169878255536 }];
 
 export const MapModule = () => {
   const containerRef = useRef<HTMLDivElement>(null);
+  const { width, height } = useWindow();
 
+  const zoom = width > height ? 10 : 9;
   const markers = useMarkerPositions(containerRef, points, center, zoom);
 
   const handleMarkerClick = (index: number) => {
     console.log(`Клик по маркеру ${index + 1}`, points[index]);
   };
+
+  const handleClick = (event: React.MouseEvent<HTMLDivElement>) => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    const rect = container.getBoundingClientRect();
+    if (event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom) return;
+
+    const clickX = event.clientX - rect.left;
+    const clickY = event.clientY - rect.top;
+
+    const centerPixel = project(center.lat, center.lon, zoom);
+    const offsetX = clickX - rect.width / 2;
+    const offsetY = clickY - rect.height / 2;
+
+    const worldX = centerPixel.x + offsetX;
+    const worldY = centerPixel.y + offsetY;
+
+    const { x, y } = toEPSG3857Direct(worldX, worldY, zoom);
+
+    const stringCoord = `POINT (${x} ${y})`;
+
+    console.log('Клик по карте', stringCoord);
+  };
+
   return (
-    <div className='relative h-full w-full' ref={containerRef}>
+    <div className='relative h-full w-full' ref={containerRef} onClick={handleClick}>
       <iframe
-        src={`https://geois2.orb.ru/resource/8888/display/tiny?base=basemap_0&lon=56.0525&lat=52.3898&angle=0&zoom=${zoom}`}
-        className='z-0 h-full w-full'
-        style={{ pointerEvents: 'none' }}
+        src={`https://geois2.orb.ru/resource/8888/display/tiny?base=basemap_0&lon=${center.lon}&lat=${center.lat}&angle=0&zoom=${zoom}`}
+        className='pointer-events-none z-0 h-full w-full'
       />
       <Marker markers={markers} handleMarkerClick={handleMarkerClick} />
     </div>
