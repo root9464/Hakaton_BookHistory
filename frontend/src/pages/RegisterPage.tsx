@@ -1,11 +1,11 @@
-import { AuthModule } from '../modules/auth/Module';
+import { RegisterModule } from '../modules/auth/Module';
 
 import SvoFrame from '@/assets//png/svo.png';
 
-export default function AuthPage() {
+export default function RegisterPage() {
   return (
     <div className='relative flex h-full w-full flex-row items-center justify-between pr-[40px]'>
-      <AuthModule />
+      <RegisterModule />
 
       <div className='relative flex h-fit w-fit flex-col items-center justify-center'>
         <p className='absolute bottom-5 text-3xl font-bold text-white'>Цени наших предков !</p>

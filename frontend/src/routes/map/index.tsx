@@ -1,9 +1,6 @@
+import MapPage from '@/pages/MapPage';
 import { createFileRoute } from '@tanstack/react-router';
 
 export const Route = createFileRoute('/map/')({
-  component: RouteComponent,
+  component: MapPage,
 });
-
-function RouteComponent() {
-  return <div>Hello "/map/"!</div>;
-}

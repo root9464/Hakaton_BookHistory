@@ -1,7 +1,8 @@
-import { Outlet, createRootRoute } from '@tanstack/react-router';
+import { UserRole } from '@/modules/auth/store/userRole';
+import { Outlet, createRootRouteWithContext } from '@tanstack/react-router';
 import * as React from 'react';
 
-export const Route = createRootRoute({
+export const Route = createRootRouteWithContext<{ userRole: UserRole | null }>()({
   component: Layout,
 });
 

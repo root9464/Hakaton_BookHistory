@@ -41,7 +41,7 @@ export default function MainPage() {
 
   return (
     <div className='relative flex h-screen w-full items-center justify-center overflow-x-hidden'>
-      <img className='z-0 h-full w-full object-cover' src={MainBg} alt='svo frame' />
+      <img className='z-0 h-full w-full object-cover object-[70%_0] md:object-center' src={MainBg} alt='svo frame' />
 
       <div className='absolute top-0 z-[1] h-full w-full bg-transparent'>
         <div className='relative h-full w-full bg-transparent px-2 pt-20 md:px-5'>
@@ -85,11 +85,13 @@ export default function MainPage() {
             )}
           </div>
 
-          {width >= 1080 && (
-            <Link to='/map' className='absolute right-[25%] top-[56%] flex h-[100px] w-[100px] items-end justify-center bg-transparent'>
-              <MapMarker className='h-10 w-10' />
-            </Link>
-          )}
+          <Link
+            to='/map'
+            className='absolute right-[25%] top-[80%] flex h-[100px] w-[100px] flex-col items-end justify-center gap-5 bg-transparent md:top-[56%]'
+          >
+            {width < 1080 ? <p className='text-white'>Карта</p> : ''}
+            <MapMarker className='h-10 w-10' />
+          </Link>
         </div>
       </div>
     </div>

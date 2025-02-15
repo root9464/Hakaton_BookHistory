@@ -1,6 +1,7 @@
 import { Button, Input } from '@heroui/react';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Link } from '@tanstack/react-router';
+import { Link, useRouter } from '@tanstack/react-router';
+import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
 import { useRegister } from '../hooks/useAuth';
@@ -25,6 +26,16 @@ const FormShema = z.object({
 
 export type FormData = z.infer<typeof FormShema>;
 
+const fields = [
+  { name: 'email', label: 'Email', placeholder: 'Введите email', type: 'text' },
+  { name: 'password', label: 'Password', placeholder: 'Придумайте пароль', type: 'password' },
+  { name: 'phone', label: 'Phone', placeholder: 'Номер телефона', type: 'text' },
+
+  { name: 'name', label: 'Имя', placeholder: 'Введите имя', type: 'text' },
+  { name: 'surname', label: 'Фамилия', placeholder: 'Введите фамилию', type: 'text' },
+  { name: 'patronymic', label: 'Отчество', placeholder: 'Введите отчество', type: 'text' },
+];
+
 export const RegisterForm = () => {
   const {
     register,
@@ -41,67 +52,49 @@ export const RegisterForm = () => {
       phone: '',
     },
   });
+  const router = useRouter();
 
-  const { data, mutate } = useRegister();
-  console.log(data);
+  const { data, mutate, isSuccess } = useRegister();
+
+  useEffect(() => {
+    if (isSuccess) {
+      console.log(data);
+      router.navigate({ to: '/login' });
+    }
+  }, [isSuccess, data, router]);
 
   const onSubmit = (data: FormData) => mutate(data);
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className='grid h-fit w-fit grid-cols-[1fr_1fr] grid-rows-[auto_auto_auto] gap-5'>
       <div className='flex flex-col gap-5'>
-        <Input
-          {...register('email')}
-          label='Email'
-          placeholder='Введите email'
-          className='h-12 w-[315px]'
-          errorMessage={errors.email?.message}
-          isInvalid={!!errors.email}
-        />
-        <Input
-          {...register('password')}
-          label='Password'
-          placeholder='Придумайте пароль'
-          className='h-12 w-[315px]'
-          type='password'
-          errorMessage={errors.password?.message}
-          isInvalid={!!errors.password}
-        />
-        <Input
-          {...register('phone')}
-          label='Phone'
-          placeholder='Номер телефона'
-          className='h-12 w-[315px]'
-          errorMessage={errors.phone?.message}
-          isInvalid={!!errors.phone}
-        />
+        {fields.slice(0, 3).map(({ name, label, placeholder, type }, index) => (
+          <Input
+            {...register(name as keyof typeof register)}
+            key={index}
+            label={label}
+            placeholder={placeholder}
+            type={type}
+            className='h-fit w-[315px]'
+            errorMessage={errors[name as keyof typeof errors]?.message}
+            isInvalid={!!errors[name as keyof typeof errors]}
+          />
+        ))}
       </div>
 
       <div className='flex flex-col gap-5'>
-        <Input
-          {...register('name')}
-          label='Имя'
-          placeholder='Введите имя'
-          className='h-12 w-[315px]'
-          errorMessage={errors.name?.message}
-          isInvalid={!!errors.name}
-        />
-        <Input
-          {...register('surname')}
-          label='Фамилия'
-          placeholder='Введите фамилию'
-          className='h-12 w-[315px]'
-          errorMessage={errors.surname?.message}
-          isInvalid={!!errors.surname}
-        />
-        <Input
-          {...register('patronymic')}
-          label='Отчество'
-          placeholder='Введите отчество'
-          className='h-12 w-[315px]'
-          errorMessage={errors.patronymic?.message}
-          isInvalid={!!errors.patronymic}
-        />
+        {fields.slice(3).map(({ name, label, placeholder, type }, index) => (
+          <Input
+            {...register(name as keyof typeof register)}
+            key={index}
+            label={label}
+            placeholder={placeholder}
+            type={type}
+            className='h-fit w-[315px]'
+            errorMessage={errors[name as keyof typeof errors]?.message}
+            isInvalid={!!errors[name as keyof typeof errors]}
+          />
+        ))}
       </div>
 
       <div className='col-span-2 flex w-1/2 flex-col items-center justify-center place-self-center'>

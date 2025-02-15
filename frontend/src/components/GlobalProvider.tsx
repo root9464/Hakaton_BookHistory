@@ -1,6 +1,8 @@
+import { UserRoleAtom } from '@/modules/auth/store/userRole';
 import { HeroUIProvider } from '@heroui/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { createRouter, RouterProvider } from '@tanstack/react-router';
+import { useAtom } from 'jotai';
 import { routeTree } from '../routeTree.gen';
 
 const router = createRouter({
@@ -18,11 +20,16 @@ declare module '@tanstack/react-router' {
 }
 
 export const GlobalProvider = () => {
-  // хук для получения значения из store для контекста (лучше использовать store zustand а не чистый функционал tanstack router)
+  const [userRole] = useAtom(UserRoleAtom);
   return (
     <HeroUIProvider>
       <QueryClientProvider client={queryClient}>
-        <RouterProvider router={router} />
+        <RouterProvider
+          router={router}
+          context={{
+            userRole,
+          }}
+        />
       </QueryClientProvider>
     </HeroUIProvider>
   );
