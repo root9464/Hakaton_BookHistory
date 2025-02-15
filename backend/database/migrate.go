@@ -16,8 +16,8 @@ func Migrate(db *gorm.DB, trigger bool, log *logger.Logger) error {
 		log.Info("📦 Migrating database...")
 		models := []interface{}{
 			&user_model.User{},
-			&file_model.File{},
 			&application_model.Application{},
+			&file_model.File{},
 			&reward_model.Reward{},
 		}
 
