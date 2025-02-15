@@ -1,7 +1,10 @@
+import { UserLoginResponse } from '@/modules/auth/hooks/useAuth';
 import { Button, Input, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, useDisclosure } from '@heroui/react';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useQueryClient } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
+import { useOrder } from '../hook/useOrder';
 
 const OrderFormSchema = z.object({
   fio: z.string().min(1, 'ФИО обязательно для заполнения'),
@@ -20,7 +23,7 @@ export type OrderFormData = z.infer<typeof OrderFormSchema>;
 const fields = [
   { name: 'fio', label: 'ФИО', placeholder: 'Введите ФИО', type: 'text' },
   { name: 'date_of_birth', label: 'Дата рождения', placeholder: 'Введите дату рождения', type: 'date' },
-  { name: 'place_of_birth', label: 'Место рождения', placeholder: 'Введите место рождения', type: 'text' },
+  { name: 'place_of_birth', label: 'Место рождения', placeholder: 'Введите место рождения', type: 'date' },
   { name: 'name_of_millitary_commissariat', label: 'Название военкомата', placeholder: 'Введите название военкомата', type: 'text' },
   { name: 'millitary_rank', label: 'Воинское звание', placeholder: 'Введите воинское звание', type: 'text' },
   { name: 'date_of_death', label: 'Дата смерти', placeholder: 'Введите дату смерти', type: 'date' },
@@ -51,11 +54,21 @@ export const OrderModal = () => {
       files: undefined,
     },
   });
+  const queryClient = useQueryClient();
+
+  const cacheUserLoginData: UserLoginResponse | undefined = queryClient.getQueryData(['user']);
+
+  const { mutate } = useOrder();
 
   const onSubmit = (data: OrderFormData) => {
-    console.log(data);
+    const formData = new FormData();
+    Object.entries({ ...data, sender_id: cacheUserLoginData?.data.id ?? '' }).forEach(([key, value]) =>
+      value instanceof FileList ? Array.from(value).forEach((file) => formData.append(key, file)) : formData.append(key, value as string),
+    );
+    console.log(data, 'data');
     reset();
     onOpenChange();
+    mutate(formData);
   };
 
   return (
@@ -97,7 +110,7 @@ export const OrderModal = () => {
                   ))}
                 </ModalBody>
                 <ModalFooter>
-                  <Button color='danger' variant='light' onPress={onClose}>
+                  <Button color='danger' variant='light' onPress={onClose} type='reset'>
                     Отмена
                   </Button>
                   <Button color='primary' type='submit'>

@@ -12,6 +12,10 @@ import (
 )
 
 func (s *ApplicationService) Create(ctx context.Context, dto *application_dto.CreateApplicationDto, files *file_dto.CreateManyFileDto) error {
+	s.logger.Info("creating application")
+	s.logger.Infof("dto: %v", dto)
+	s.logger.Infof("files: %v", files)
+
 	if err := s.validator.Struct(dto); err != nil {
 		s.logger.Warnf("validation error: %v", err)
 		return &fiber.Error{
@@ -19,6 +23,8 @@ func (s *ApplicationService) Create(ctx context.Context, dto *application_dto.Cr
 			Message: err.Error(),
 		}
 	}
+
+	s.logger.Info("converting dto to entity")
 
 	applicationModel, err := utils.ConvertDtoToEntity[application_model.Application](dto)
 	if err != nil {
@@ -29,6 +35,8 @@ func (s *ApplicationService) Create(ctx context.Context, dto *application_dto.Cr
 		}
 	}
 
+	s.logger.Infof("converting dto to entity: %v", applicationModel)
+	s.logger.Info("creating files...")
 	names, err := s.fileServ.CreateMany(ctx, files)
 	if err != nil {
 		s.logger.Errorf("error creating files: %v", err)
@@ -38,12 +46,14 @@ func (s *ApplicationService) Create(ctx context.Context, dto *application_dto.Cr
 		}
 	}
 
+	s.logger.Info("creating application...")
 	for _, name := range names {
 		applicationModel.Files = append(applicationModel.Files, file_model.File{
 			Name: name,
 		})
 	}
 
+	s.logger.Infof("application model: %v", applicationModel)
 	if err := s.repo.Create(ctx, applicationModel); err != nil {
 		s.logger.Errorf("error creating application: %v", err)
 		return &fiber.Error{
