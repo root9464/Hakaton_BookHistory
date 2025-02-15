@@ -3,7 +3,7 @@ package application_repository
 import (
 	"context"
 
-	application_model "github.com/root9464/Hakaton_Zalupa/module/application/model"
+	application_model "github.com/root9464/Hakaton_BookHistory/module/application/model"
 )
 
 func (r *ApplicationRepository) GetAll(ctx context.Context) ([]application_model.Application, error) {

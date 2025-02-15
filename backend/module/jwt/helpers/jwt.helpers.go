@@ -6,8 +6,8 @@ import (
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
-	jwt_dto "github.com/root9464/Hakaton_Zalupa/module/jwt/dto"
-	user_model "github.com/root9464/Hakaton_Zalupa/module/user/model"
+	jwt_dto "github.com/root9464/Hakaton_BookHistory/module/jwt/dto"
+	user_model "github.com/root9464/Hakaton_BookHistory/module/user/model"
 )
 
 func (h *jwtHelper) CreateJwt(claims jwt.Claims, key ed25519.PrivateKey) (*string, error) {

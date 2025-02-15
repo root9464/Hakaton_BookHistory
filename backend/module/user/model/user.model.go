@@ -3,7 +3,7 @@ package user_model
 import (
 	"fmt"
 
-	application_model "github.com/root9464/Hakaton_Zalupa/module/application/model"
+	application_model "github.com/root9464/Hakaton_BookHistory/module/application/model"
 )
 
 type Role string

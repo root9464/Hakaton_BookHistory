@@ -3,7 +3,7 @@ package file_repository
 import (
 	"context"
 
-	file_model "github.com/root9464/Hakaton_Zalupa/module/file/model"
+	file_model "github.com/root9464/Hakaton_BookHistory/module/file/model"
 )
 
 func (r *FileRepository) CreateMany(ctx context.Context, files []file_model.File) error {

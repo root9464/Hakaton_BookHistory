@@ -5,8 +5,8 @@ import (
 
 	"github.com/go-playground/validator/v10"
 	"github.com/golang-jwt/jwt/v5"
-	jwt_dto "github.com/root9464/Hakaton_Zalupa/module/jwt/dto"
-	"github.com/root9464/Hakaton_Zalupa/shared/logger"
+	jwt_dto "github.com/root9464/Hakaton_BookHistory/module/jwt/dto"
+	"github.com/root9464/Hakaton_BookHistory/shared/logger"
 )
 
 var _ IJwtHelper = (*jwtHelper)(nil)

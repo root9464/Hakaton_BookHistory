@@ -4,9 +4,9 @@ import (
 	"time"
 
 	"github.com/gofiber/fiber/v2"
-	auth_dto "github.com/root9464/Hakaton_Zalupa/module/auth/dto"
-	jwt_dto "github.com/root9464/Hakaton_Zalupa/module/jwt/dto"
-	"github.com/root9464/Hakaton_Zalupa/shared/utils"
+	auth_dto "github.com/root9464/Hakaton_BookHistory/module/auth/dto"
+	jwt_dto "github.com/root9464/Hakaton_BookHistory/module/jwt/dto"
+	"github.com/root9464/Hakaton_BookHistory/shared/utils"
 )
 
 func (c *authController) Logout(ctx *fiber.Ctx) error {

@@ -2,9 +2,9 @@ package reward_controller
 
 import (
 	"github.com/gofiber/fiber/v2"
-	file_dto "github.com/root9464/Hakaton_Zalupa/module/file/dto"
-	reward_dto "github.com/root9464/Hakaton_Zalupa/module/reward/dto"
-	"github.com/root9464/Hakaton_Zalupa/shared/utils"
+	file_dto "github.com/root9464/Hakaton_BookHistory/module/file/dto"
+	reward_dto "github.com/root9464/Hakaton_BookHistory/module/reward/dto"
+	"github.com/root9464/Hakaton_BookHistory/shared/utils"
 )
 
 func (c *RewardController) Create(ctx *fiber.Ctx) error {

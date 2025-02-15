@@ -9,7 +9,7 @@ import (
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/golang-jwt/jwt/v5"
-	jwt_dto "github.com/root9464/Hakaton_Zalupa/module/jwt/dto"
+	jwt_dto "github.com/root9464/Hakaton_BookHistory/module/jwt/dto"
 )
 
 const (

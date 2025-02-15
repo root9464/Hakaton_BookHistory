@@ -1,6 +1,6 @@
 package reward_model
 
-import file_model "github.com/root9464/Hakaton_Zalupa/module/file/model"
+import file_model "github.com/root9464/Hakaton_BookHistory/module/file/model"
 
 type Reward struct {
 	ID    string          `gorm:"primaryKey;type:uuid;default:uuid_generate_v4()" json:"id"`

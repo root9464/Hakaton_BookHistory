@@ -3,12 +3,12 @@ package user_module
 import (
 	"github.com/go-playground/validator/v10"
 	"github.com/gofiber/fiber/v2"
-	jwt_module "github.com/root9464/Hakaton_Zalupa/module/jwt"
-	user_controller "github.com/root9464/Hakaton_Zalupa/module/user/controller"
-	user_repository "github.com/root9464/Hakaton_Zalupa/module/user/repository"
-	user_service "github.com/root9464/Hakaton_Zalupa/module/user/service"
-	"github.com/root9464/Hakaton_Zalupa/shared/logger"
-	"github.com/root9464/Hakaton_Zalupa/shared/middleware"
+	jwt_module "github.com/root9464/Hakaton_BookHistory/module/jwt"
+	user_controller "github.com/root9464/Hakaton_BookHistory/module/user/controller"
+	user_repository "github.com/root9464/Hakaton_BookHistory/module/user/repository"
+	user_service "github.com/root9464/Hakaton_BookHistory/module/user/service"
+	"github.com/root9464/Hakaton_BookHistory/shared/logger"
+	"github.com/root9464/Hakaton_BookHistory/shared/middleware"
 	"gorm.io/gorm"
 )
 

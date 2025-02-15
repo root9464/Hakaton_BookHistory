@@ -1,6 +1,6 @@
 package jwt_dto
 
-import user_model "github.com/root9464/Hakaton_Zalupa/module/user/model"
+import user_model "github.com/root9464/Hakaton_BookHistory/module/user/model"
 
 type UserData struct {
 	ID   string `json:"id" validate:"required"`

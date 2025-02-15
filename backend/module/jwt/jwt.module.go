@@ -2,10 +2,10 @@ package jwt_module
 
 import (
 	"github.com/go-playground/validator/v10"
-	jwt_funcs "github.com/root9464/Hakaton_Zalupa/module/jwt/functions"
-	jwt_helpers "github.com/root9464/Hakaton_Zalupa/module/jwt/helpers"
-	"github.com/root9464/Hakaton_Zalupa/shared/logger"
-	"github.com/root9464/Hakaton_Zalupa/shared/utils"
+	jwt_funcs "github.com/root9464/Hakaton_BookHistory/module/jwt/functions"
+	jwt_helpers "github.com/root9464/Hakaton_BookHistory/module/jwt/helpers"
+	"github.com/root9464/Hakaton_BookHistory/shared/logger"
+	"github.com/root9464/Hakaton_BookHistory/shared/utils"
 	"gorm.io/gorm"
 )
 

@@ -3,8 +3,8 @@ package user_controller
 import (
 	"github.com/go-playground/validator/v10"
 	"github.com/gofiber/fiber/v2"
-	user_service "github.com/root9464/Hakaton_Zalupa/module/user/service"
-	"github.com/root9464/Hakaton_Zalupa/shared/logger"
+	user_service "github.com/root9464/Hakaton_BookHistory/module/user/service"
+	"github.com/root9464/Hakaton_BookHistory/shared/logger"
 )
 
 var _ IUserController = (*UserController)(nil)

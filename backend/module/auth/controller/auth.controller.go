@@ -4,10 +4,10 @@ import (
 	"crypto/ed25519"
 
 	"github.com/gofiber/fiber/v2"
-	auth_service "github.com/root9464/Hakaton_Zalupa/module/auth/service"
-	jwt_module "github.com/root9464/Hakaton_Zalupa/module/jwt"
-	jwt_funcs "github.com/root9464/Hakaton_Zalupa/module/jwt/functions"
-	jwt_helpers "github.com/root9464/Hakaton_Zalupa/module/jwt/helpers"
+	auth_service "github.com/root9464/Hakaton_BookHistory/module/auth/service"
+	jwt_module "github.com/root9464/Hakaton_BookHistory/module/jwt"
+	jwt_funcs "github.com/root9464/Hakaton_BookHistory/module/jwt/functions"
+	jwt_helpers "github.com/root9464/Hakaton_BookHistory/module/jwt/helpers"
 )
 
 type IAuthController interface {

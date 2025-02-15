@@ -3,7 +3,7 @@ package reward_repository
 import (
 	"context"
 
-	reward_model "github.com/root9464/Hakaton_Zalupa/module/reward/model"
+	reward_model "github.com/root9464/Hakaton_BookHistory/module/reward/model"
 )
 
 func (r *RewardRepository) GetAll(ctx context.Context) ([]reward_model.Reward, error) {

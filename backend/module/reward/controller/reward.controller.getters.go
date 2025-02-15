@@ -2,7 +2,7 @@ package reward_controller
 
 import (
 	"github.com/gofiber/fiber/v2"
-	"github.com/root9464/Hakaton_Zalupa/shared/utils"
+	"github.com/root9464/Hakaton_BookHistory/shared/utils"
 )
 
 func (c *RewardController) GetByID(ctx *fiber.Ctx) error {

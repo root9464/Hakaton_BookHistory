@@ -3,8 +3,8 @@ package reward_repository
 import (
 	"context"
 
-	reward_model "github.com/root9464/Hakaton_Zalupa/module/reward/model"
-	"github.com/root9464/Hakaton_Zalupa/shared/logger"
+	reward_model "github.com/root9464/Hakaton_BookHistory/module/reward/model"
+	"github.com/root9464/Hakaton_BookHistory/shared/logger"
 	"gorm.io/gorm"
 )
 

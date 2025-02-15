@@ -4,12 +4,12 @@ import (
 	"context"
 
 	"github.com/go-playground/validator/v10"
-	file_dto "github.com/root9464/Hakaton_Zalupa/module/file/dto"
-	file_service "github.com/root9464/Hakaton_Zalupa/module/file/service"
-	reward_dto "github.com/root9464/Hakaton_Zalupa/module/reward/dto"
-	reward_model "github.com/root9464/Hakaton_Zalupa/module/reward/model"
-	reward_repository "github.com/root9464/Hakaton_Zalupa/module/reward/repository"
-	"github.com/root9464/Hakaton_Zalupa/shared/logger"
+	file_dto "github.com/root9464/Hakaton_BookHistory/module/file/dto"
+	file_service "github.com/root9464/Hakaton_BookHistory/module/file/service"
+	reward_dto "github.com/root9464/Hakaton_BookHistory/module/reward/dto"
+	reward_model "github.com/root9464/Hakaton_BookHistory/module/reward/model"
+	reward_repository "github.com/root9464/Hakaton_BookHistory/module/reward/repository"
+	"github.com/root9464/Hakaton_BookHistory/shared/logger"
 )
 
 var _ IRewardService = (*RewardService)(nil)

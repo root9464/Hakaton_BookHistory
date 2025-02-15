@@ -3,7 +3,7 @@ package database
 import (
 	"time"
 
-	"github.com/root9464/Hakaton_Zalupa/shared/logger"
+	"github.com/root9464/Hakaton_BookHistory/shared/logger"
 	"gorm.io/driver/postgres"
 
 	"gorm.io/gorm"

@@ -4,10 +4,10 @@ import (
 	"context"
 
 	"github.com/go-playground/validator/v10"
-	user_dto "github.com/root9464/Hakaton_Zalupa/module/user/dto"
-	user_model "github.com/root9464/Hakaton_Zalupa/module/user/model"
-	user_repository "github.com/root9464/Hakaton_Zalupa/module/user/repository"
-	"github.com/root9464/Hakaton_Zalupa/shared/logger"
+	user_dto "github.com/root9464/Hakaton_BookHistory/module/user/dto"
+	user_model "github.com/root9464/Hakaton_BookHistory/module/user/model"
+	user_repository "github.com/root9464/Hakaton_BookHistory/module/user/repository"
+	"github.com/root9464/Hakaton_BookHistory/shared/logger"
 )
 
 var _ IUserService = (*UserService)(nil)

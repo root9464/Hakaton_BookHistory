@@ -3,8 +3,8 @@ package user_repository
 import (
 	"context"
 
-	user_model "github.com/root9464/Hakaton_Zalupa/module/user/model"
-	"github.com/root9464/Hakaton_Zalupa/shared/logger"
+	user_model "github.com/root9464/Hakaton_BookHistory/module/user/model"
+	"github.com/root9464/Hakaton_BookHistory/shared/logger"
 	"gorm.io/gorm"
 )
 

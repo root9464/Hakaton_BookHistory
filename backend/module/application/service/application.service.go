@@ -4,12 +4,12 @@ import (
 	"context"
 
 	"github.com/go-playground/validator/v10"
-	application_dto "github.com/root9464/Hakaton_Zalupa/module/application/dto"
-	application_model "github.com/root9464/Hakaton_Zalupa/module/application/model"
-	application_repository "github.com/root9464/Hakaton_Zalupa/module/application/repository"
-	file_dto "github.com/root9464/Hakaton_Zalupa/module/file/dto"
-	file_service "github.com/root9464/Hakaton_Zalupa/module/file/service"
-	"github.com/root9464/Hakaton_Zalupa/shared/logger"
+	application_dto "github.com/root9464/Hakaton_BookHistory/module/application/dto"
+	application_model "github.com/root9464/Hakaton_BookHistory/module/application/model"
+	application_repository "github.com/root9464/Hakaton_BookHistory/module/application/repository"
+	file_dto "github.com/root9464/Hakaton_BookHistory/module/file/dto"
+	file_service "github.com/root9464/Hakaton_BookHistory/module/file/service"
+	"github.com/root9464/Hakaton_BookHistory/shared/logger"
 )
 
 var _ IApplicationService = (*ApplicationService)(nil)

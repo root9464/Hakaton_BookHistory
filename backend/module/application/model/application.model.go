@@ -1,6 +1,6 @@
 package application_model
 
-import file_model "github.com/root9464/Hakaton_Zalupa/module/file/model"
+import file_model "github.com/root9464/Hakaton_BookHistory/module/file/model"
 
 type Status string
 

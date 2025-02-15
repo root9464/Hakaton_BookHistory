@@ -4,11 +4,11 @@ import (
 	"context"
 
 	"github.com/gofiber/fiber/v2"
-	application_dto "github.com/root9464/Hakaton_Zalupa/module/application/dto"
-	application_model "github.com/root9464/Hakaton_Zalupa/module/application/model"
-	file_dto "github.com/root9464/Hakaton_Zalupa/module/file/dto"
-	file_model "github.com/root9464/Hakaton_Zalupa/module/file/model"
-	"github.com/root9464/Hakaton_Zalupa/shared/utils"
+	application_dto "github.com/root9464/Hakaton_BookHistory/module/application/dto"
+	application_model "github.com/root9464/Hakaton_BookHistory/module/application/model"
+	file_dto "github.com/root9464/Hakaton_BookHistory/module/file/dto"
+	file_model "github.com/root9464/Hakaton_BookHistory/module/file/model"
+	"github.com/root9464/Hakaton_BookHistory/shared/utils"
 )
 
 func (s *ApplicationService) Create(ctx context.Context, dto *application_dto.CreateApplicationDto, files *file_dto.CreateManyFileDto) error {

@@ -3,8 +3,8 @@ package application_repository
 import (
 	"context"
 
-	application_model "github.com/root9464/Hakaton_Zalupa/module/application/model"
-	"github.com/root9464/Hakaton_Zalupa/shared/logger"
+	application_model "github.com/root9464/Hakaton_BookHistory/module/application/model"
+	"github.com/root9464/Hakaton_BookHistory/shared/logger"
 	"gorm.io/gorm"
 )
 

@@ -1,12 +1,12 @@
 package app
 
 import (
-	application_module "github.com/root9464/Hakaton_Zalupa/module/application"
-	auth_module "github.com/root9464/Hakaton_Zalupa/module/auth"
-	file_module "github.com/root9464/Hakaton_Zalupa/module/file"
-	jwt_module "github.com/root9464/Hakaton_Zalupa/module/jwt"
-	reward_module "github.com/root9464/Hakaton_Zalupa/module/reward"
-	user_module "github.com/root9464/Hakaton_Zalupa/module/user"
+	application_module "github.com/root9464/Hakaton_BookHistory/module/application"
+	auth_module "github.com/root9464/Hakaton_BookHistory/module/auth"
+	file_module "github.com/root9464/Hakaton_BookHistory/module/file"
+	jwt_module "github.com/root9464/Hakaton_BookHistory/module/jwt"
+	reward_module "github.com/root9464/Hakaton_BookHistory/module/reward"
+	user_module "github.com/root9464/Hakaton_BookHistory/module/user"
 )
 
 // jwt_module "github.com/root9464/Ton-students/module/jwt"

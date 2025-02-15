@@ -3,11 +3,11 @@ package reward_module
 import (
 	"github.com/go-playground/validator/v10"
 	"github.com/gofiber/fiber/v2"
-	file_service "github.com/root9464/Hakaton_Zalupa/module/file/service"
-	reward_controller "github.com/root9464/Hakaton_Zalupa/module/reward/controller"
-	reward_repository "github.com/root9464/Hakaton_Zalupa/module/reward/repository"
-	reward_service "github.com/root9464/Hakaton_Zalupa/module/reward/service"
-	"github.com/root9464/Hakaton_Zalupa/shared/logger"
+	file_service "github.com/root9464/Hakaton_BookHistory/module/file/service"
+	reward_controller "github.com/root9464/Hakaton_BookHistory/module/reward/controller"
+	reward_repository "github.com/root9464/Hakaton_BookHistory/module/reward/repository"
+	reward_service "github.com/root9464/Hakaton_BookHistory/module/reward/service"
+	"github.com/root9464/Hakaton_BookHistory/shared/logger"
 	"gorm.io/gorm"
 )
 

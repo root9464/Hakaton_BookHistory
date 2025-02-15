@@ -1,9 +1,9 @@
 package file_module
 
 import (
-	file_repository "github.com/root9464/Hakaton_Zalupa/module/file/repository"
-	file_service "github.com/root9464/Hakaton_Zalupa/module/file/service"
-	"github.com/root9464/Hakaton_Zalupa/shared/logger"
+	file_repository "github.com/root9464/Hakaton_BookHistory/module/file/repository"
+	file_service "github.com/root9464/Hakaton_BookHistory/module/file/service"
+	"github.com/root9464/Hakaton_BookHistory/shared/logger"
 	"gorm.io/gorm"
 )
 

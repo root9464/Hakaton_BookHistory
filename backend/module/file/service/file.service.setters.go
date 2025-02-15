@@ -8,7 +8,7 @@ import (
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/google/uuid"
-	file_dto "github.com/root9464/Hakaton_Zalupa/module/file/dto"
+	file_dto "github.com/root9464/Hakaton_BookHistory/module/file/dto"
 )
 
 func (s *FileService) CreateMany(ctx context.Context, dto *file_dto.CreateManyFileDto) ([]string, error) {

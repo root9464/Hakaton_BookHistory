@@ -3,13 +3,13 @@ package auth_module
 import (
 	"github.com/go-playground/validator/v10"
 	"github.com/gofiber/fiber/v2"
-	"github.com/root9464/Hakaton_Zalupa/config"
-	auth_controller "github.com/root9464/Hakaton_Zalupa/module/auth/controller"
-	auth_service "github.com/root9464/Hakaton_Zalupa/module/auth/service"
-	jwt_module "github.com/root9464/Hakaton_Zalupa/module/jwt"
-	user_service "github.com/root9464/Hakaton_Zalupa/module/user/service"
-	"github.com/root9464/Hakaton_Zalupa/shared/logger"
-	"github.com/root9464/Hakaton_Zalupa/shared/utils"
+	"github.com/root9464/Hakaton_BookHistory/config"
+	auth_controller "github.com/root9464/Hakaton_BookHistory/module/auth/controller"
+	auth_service "github.com/root9464/Hakaton_BookHistory/module/auth/service"
+	jwt_module "github.com/root9464/Hakaton_BookHistory/module/jwt"
+	user_service "github.com/root9464/Hakaton_BookHistory/module/user/service"
+	"github.com/root9464/Hakaton_BookHistory/shared/logger"
+	"github.com/root9464/Hakaton_BookHistory/shared/utils"
 )
 
 type AuthModule struct {

@@ -4,9 +4,9 @@ import (
 	"context"
 
 	"github.com/gofiber/fiber/v2"
-	user_dto "github.com/root9464/Hakaton_Zalupa/module/user/dto"
-	user_model "github.com/root9464/Hakaton_Zalupa/module/user/model"
-	"github.com/root9464/Hakaton_Zalupa/shared/utils"
+	user_dto "github.com/root9464/Hakaton_BookHistory/module/user/dto"
+	user_model "github.com/root9464/Hakaton_BookHistory/module/user/model"
+	"github.com/root9464/Hakaton_BookHistory/shared/utils"
 )
 
 func (s *UserService) Create(ctx context.Context, dto *user_dto.CreateDto) error {

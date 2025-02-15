@@ -2,9 +2,9 @@ package application_controller
 
 import (
 	"github.com/gofiber/fiber/v2"
-	application_dto "github.com/root9464/Hakaton_Zalupa/module/application/dto"
-	file_dto "github.com/root9464/Hakaton_Zalupa/module/file/dto"
-	"github.com/root9464/Hakaton_Zalupa/shared/utils"
+	application_dto "github.com/root9464/Hakaton_BookHistory/module/application/dto"
+	file_dto "github.com/root9464/Hakaton_BookHistory/module/file/dto"
+	"github.com/root9464/Hakaton_BookHistory/shared/utils"
 )
 
 func (c *ApplicationController) Create(ctx *fiber.Ctx) error {

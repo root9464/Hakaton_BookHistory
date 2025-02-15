@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"github.com/gofiber/fiber/v2"
-	reward_model "github.com/root9464/Hakaton_Zalupa/module/reward/model"
+	reward_model "github.com/root9464/Hakaton_BookHistory/module/reward/model"
 )
 
 func (s *RewardService) GetAll(ctx context.Context) ([]reward_model.Reward, error) {

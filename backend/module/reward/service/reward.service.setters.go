@@ -4,11 +4,11 @@ import (
 	"context"
 
 	"github.com/gofiber/fiber/v2"
-	file_dto "github.com/root9464/Hakaton_Zalupa/module/file/dto"
-	file_model "github.com/root9464/Hakaton_Zalupa/module/file/model"
-	reward_dto "github.com/root9464/Hakaton_Zalupa/module/reward/dto"
-	reward_model "github.com/root9464/Hakaton_Zalupa/module/reward/model"
-	"github.com/root9464/Hakaton_Zalupa/shared/utils"
+	file_dto "github.com/root9464/Hakaton_BookHistory/module/file/dto"
+	file_model "github.com/root9464/Hakaton_BookHistory/module/file/model"
+	reward_dto "github.com/root9464/Hakaton_BookHistory/module/reward/dto"
+	reward_model "github.com/root9464/Hakaton_BookHistory/module/reward/model"
+	"github.com/root9464/Hakaton_BookHistory/shared/utils"
 )
 
 func (s *RewardService) Create(ctx context.Context, reward *reward_dto.CreateRewardDto, files *file_dto.CreateManyFileDto) error {

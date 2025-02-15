@@ -2,8 +2,8 @@ package user_controller
 
 import (
 	"github.com/gofiber/fiber/v2"
-	user_dto "github.com/root9464/Hakaton_Zalupa/module/user/dto"
-	"github.com/root9464/Hakaton_Zalupa/shared/utils"
+	user_dto "github.com/root9464/Hakaton_BookHistory/module/user/dto"
+	"github.com/root9464/Hakaton_BookHistory/shared/utils"
 )
 
 func (c *UserController) Create(ctx *fiber.Ctx) error {

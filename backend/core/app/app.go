@@ -7,10 +7,10 @@ import (
 	"github.com/go-playground/validator/v10"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
-	"github.com/root9464/Hakaton_Zalupa/config"
-	"github.com/root9464/Hakaton_Zalupa/database"
-	"github.com/root9464/Hakaton_Zalupa/shared/logger"
-	"github.com/root9464/Hakaton_Zalupa/shared/middleware"
+	"github.com/root9464/Hakaton_BookHistory/config"
+	"github.com/root9464/Hakaton_BookHistory/database"
+	"github.com/root9464/Hakaton_BookHistory/shared/logger"
+	"github.com/root9464/Hakaton_BookHistory/shared/middleware"
 	"gorm.io/gorm"
 )
 

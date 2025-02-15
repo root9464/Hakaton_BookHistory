@@ -1,9 +1,9 @@
 package database
 
 import (
-	file_model "github.com/root9464/Hakaton_Zalupa/module/file/model"
-	user_model "github.com/root9464/Hakaton_Zalupa/module/user/model"
-	"github.com/root9464/Hakaton_Zalupa/shared/logger"
+	file_model "github.com/root9464/Hakaton_BookHistory/module/file/model"
+	user_model "github.com/root9464/Hakaton_BookHistory/module/user/model"
+	"github.com/root9464/Hakaton_BookHistory/shared/logger"
 	"gorm.io/gorm"
 )
 

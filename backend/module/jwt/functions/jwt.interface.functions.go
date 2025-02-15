@@ -4,9 +4,9 @@ import (
 	"crypto/ed25519"
 
 	"github.com/go-playground/validator/v10"
-	jwt_dto "github.com/root9464/Hakaton_Zalupa/module/jwt/dto"
-	jwt_helpers "github.com/root9464/Hakaton_Zalupa/module/jwt/helpers"
-	"github.com/root9464/Hakaton_Zalupa/shared/logger"
+	jwt_dto "github.com/root9464/Hakaton_BookHistory/module/jwt/dto"
+	jwt_helpers "github.com/root9464/Hakaton_BookHistory/module/jwt/helpers"
+	"github.com/root9464/Hakaton_BookHistory/shared/logger"
 )
 
 var _ IJwtFuncs = (*JwtFuncs)(nil)

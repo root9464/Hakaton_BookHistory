@@ -2,7 +2,7 @@ package main
 
 import (
 	_ "github.com/lib/pq"
-	"github.com/root9464/Hakaton_Zalupa/core/app"
+	"github.com/root9464/Hakaton_BookHistory/core/app"
 )
 
 func main() {

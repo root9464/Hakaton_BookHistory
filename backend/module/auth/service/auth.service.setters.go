@@ -4,10 +4,10 @@ import (
 	"context"
 
 	"github.com/gofiber/fiber/v2"
-	auth_dto "github.com/root9464/Hakaton_Zalupa/module/auth/dto"
-	user_dto "github.com/root9464/Hakaton_Zalupa/module/user/dto"
-	user_model "github.com/root9464/Hakaton_Zalupa/module/user/model"
-	"github.com/root9464/Hakaton_Zalupa/shared/utils"
+	auth_dto "github.com/root9464/Hakaton_BookHistory/module/auth/dto"
+	user_dto "github.com/root9464/Hakaton_BookHistory/module/user/dto"
+	user_model "github.com/root9464/Hakaton_BookHistory/module/user/model"
+	"github.com/root9464/Hakaton_BookHistory/shared/utils"
 )
 
 func (s *authService) Authorize(ctx context.Context, dto *auth_dto.AutorizeDto) (*user_model.User, error) {

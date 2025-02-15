@@ -3,9 +3,9 @@ package file_service
 import (
 	"context"
 
-	file_dto "github.com/root9464/Hakaton_Zalupa/module/file/dto"
-	file_repository "github.com/root9464/Hakaton_Zalupa/module/file/repository"
-	"github.com/root9464/Hakaton_Zalupa/shared/logger"
+	file_dto "github.com/root9464/Hakaton_BookHistory/module/file/dto"
+	file_repository "github.com/root9464/Hakaton_BookHistory/module/file/repository"
+	"github.com/root9464/Hakaton_BookHistory/shared/logger"
 )
 
 var _ IFileService = (*FileService)(nil)

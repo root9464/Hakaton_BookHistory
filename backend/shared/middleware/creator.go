@@ -7,10 +7,10 @@ import (
 	"regexp"
 
 	"github.com/gofiber/fiber/v2"
-	jwt_helpers "github.com/root9464/Hakaton_Zalupa/module/jwt/helpers"
-	user_model "github.com/root9464/Hakaton_Zalupa/module/user/model"
-	user_repository "github.com/root9464/Hakaton_Zalupa/module/user/repository"
-	"github.com/root9464/Hakaton_Zalupa/shared/logger"
+	jwt_helpers "github.com/root9464/Hakaton_BookHistory/module/jwt/helpers"
+	user_model "github.com/root9464/Hakaton_BookHistory/module/user/model"
+	user_repository "github.com/root9464/Hakaton_BookHistory/module/user/repository"
+	"github.com/root9464/Hakaton_BookHistory/shared/logger"
 )
 
 type Middleware struct {

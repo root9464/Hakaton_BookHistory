@@ -2,8 +2,8 @@ package reward_controller
 
 import (
 	"github.com/gofiber/fiber/v2"
-	reward_service "github.com/root9464/Hakaton_Zalupa/module/reward/service"
-	"github.com/root9464/Hakaton_Zalupa/shared/logger"
+	reward_service "github.com/root9464/Hakaton_BookHistory/module/reward/service"
+	"github.com/root9464/Hakaton_BookHistory/shared/logger"
 )
 
 var _ IRewardController = (*RewardController)(nil)

@@ -1,4 +1,4 @@
-module github.com/root9464/Hakaton_Zalupa
+module github.com/root9464/Hakaton_BookHistory
 
 go 1.23.2
 

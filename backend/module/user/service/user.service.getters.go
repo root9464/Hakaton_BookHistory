@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"github.com/gofiber/fiber/v2"
-	user_model "github.com/root9464/Hakaton_Zalupa/module/user/model"
+	user_model "github.com/root9464/Hakaton_BookHistory/module/user/model"
 )
 
 func (s *UserService) GetByID(ctx context.Context, id string) (*user_model.User, error) {

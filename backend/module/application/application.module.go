@@ -3,11 +3,11 @@ package application_module
 import (
 	"github.com/go-playground/validator/v10"
 	"github.com/gofiber/fiber/v2"
-	application_controller "github.com/root9464/Hakaton_Zalupa/module/application/controller"
-	application_repository "github.com/root9464/Hakaton_Zalupa/module/application/repository"
-	application_service "github.com/root9464/Hakaton_Zalupa/module/application/service"
-	file_service "github.com/root9464/Hakaton_Zalupa/module/file/service"
-	"github.com/root9464/Hakaton_Zalupa/shared/logger"
+	application_controller "github.com/root9464/Hakaton_BookHistory/module/application/controller"
+	application_repository "github.com/root9464/Hakaton_BookHistory/module/application/repository"
+	application_service "github.com/root9464/Hakaton_BookHistory/module/application/service"
+	file_service "github.com/root9464/Hakaton_BookHistory/module/file/service"
+	"github.com/root9464/Hakaton_BookHistory/shared/logger"
 	"gorm.io/gorm"
 )
 
