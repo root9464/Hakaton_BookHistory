@@ -70,7 +70,7 @@ func (s *apiService) CreateRecord(ctx context.Context, dto *api_dto.CreateFeatur
 	}
 
 	return response, nil
-}
+}	
 func (s *apiService) DeleteRecord(ctx context.Context, ids []api_dto.CreateFeatureResponse) error {
 	// Сериализуем массив ID в JSON
 	jsonData, err := json.Marshal(ids)

@@ -16,3 +16,21 @@ func (c *ApiController) GetRecord(ctx *fiber.Ctx) error {
 		},
 	})
 }
+
+func (c *ApiController) GetRecordByID(ctx *fiber.Ctx) error {
+	resp, err := c.apiService.GetRecordByID(ctx.Context(), ctx.Params("id"))
+	if err != nil {
+		return ctx.Status(fiber.StatusNotFound).JSON(fiber.Map{
+			"status":  "failed",
+			"message": err.Error(),
+		})
+	}
+
+	return ctx.Status(fiber.StatusOK).JSON(fiber.Map{
+		"data": fiber.Map{
+			"result": resp,
+		},
+	})
+}
+
+

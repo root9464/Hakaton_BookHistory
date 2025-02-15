@@ -21,7 +21,7 @@ type Fields struct {
 }
 
 type Attachment struct {
-	ID       string `json:"id"`
+	ID       float64 `json:"id"`
 	Name     string `json:"name"`
 	Size     int    `json:"size"`
 	MimeType string `json:"mime_type"`
@@ -33,12 +33,12 @@ type GetFeaturesResponse struct {
 }
 
 type CreateFeatureRequest struct {
-	Geom       string `json:"geom"`   // Координаты точки
 	Fields     Fields `json:"fields"` // Данные о погибшем
 	Extensions struct {
 		Attachment  *Attachment `json:"attachment,omitempty"`
 		Description string      `json:"description,omitempty"`
 	} `json:"extensions,omitempty"`
+	Geom       string `json:"geom"`   // Координаты точки
 }
 
 type CreateFeatureResponse struct {
