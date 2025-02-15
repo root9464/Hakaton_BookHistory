@@ -1,7 +1,6 @@
 package database
 
 import (
-	model "github.com/root9464/Hakaton_Zalupa/database/model"
 	"github.com/root9464/Hakaton_Zalupa/shared/logger"
 	"gorm.io/gorm"
 )
@@ -11,15 +10,7 @@ func Migrate(db *gorm.DB, trigger bool, log *logger.Logger) error {
 	if trigger {
 		log.Info("📦 Migrating database...")
 		models := []interface{}{
-			&model.User{},
-			&model.Municipality{},
-			&model.Soldier{},
-			&model.Award{},
-			&model.Document{},
-			&model.Log{},
-			&model.Template{},
-			&model.SoldierTemplate{},
-			//&model.Notification{},
+
 		}
 
 		log.Info("📦 Creating types...")
