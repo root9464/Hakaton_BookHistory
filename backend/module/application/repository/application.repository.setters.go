@@ -27,3 +27,13 @@ func (r *ApplicationRepository) Update(ctx context.Context, application *applica
 	r.logger.Info("application updated")
 	return nil
 }
+
+func (r *ApplicationRepository) UpdateAll(ctx context.Context, application *application_model.Application) error {
+	r.logger.Info("updating applications...")
+	if err := r.db.Save(&application).Error; err != nil {
+		r.logger.Errorf("error updating applications: %v", err)
+		return err
+	}
+	r.logger.Info("applications updated")
+	return nil
+}

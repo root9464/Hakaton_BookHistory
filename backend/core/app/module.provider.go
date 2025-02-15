@@ -36,8 +36,8 @@ func NewModuleProvider(app *App) (*moduleProvider, error) {
 
 func (p *moduleProvider) initDeps() error {
 	inits := []func() error{
-		p.UserModule,
 		p.JwtModule,
+		p.UserModule,
 		p.AuthModule,
 		p.FileModule,
 		p.ApplicationModule,
@@ -59,7 +59,7 @@ func (p *moduleProvider) JwtModule() error {
 }
 
 func (p *moduleProvider) UserModule() error {
-	p.userModule = user_module.NewUserModule(p.app.logger, p.app.validator, p.app.db)
+	p.userModule = user_module.NewUserModule(p.app.logger, p.app.validator, p.app.db, *p.jwtModule, p.app.config.JwtPublicKey)
 	return nil
 }
 
