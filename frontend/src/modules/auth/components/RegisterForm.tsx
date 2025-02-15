@@ -61,7 +61,7 @@ export const RegisterForm = () => {
         <Input
           {...register('password')}
           label='Password'
-          placeholder='Придумайте пароль'
+          placeholder='Введите пароль'
           className='h-12 w-[315px]'
           type='password'
           errorMessage={errors.password?.message}
