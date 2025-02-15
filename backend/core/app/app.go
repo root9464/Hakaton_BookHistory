@@ -167,6 +167,7 @@ func (app *App) initRouter() error {
 
 	app.moduleProvider.userModule.UserRoutes(api)
 	app.moduleProvider.authModule.AuthRoutes(api)
+	app.moduleProvider.applicationModule.ApplicationRoutes(api)
 
 	return nil
 }

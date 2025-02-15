@@ -1,6 +1,8 @@
 package database
 
 import (
+	application_model "github.com/root9464/Hakaton_Zalupa/module/application/model"
+	file_model "github.com/root9464/Hakaton_Zalupa/module/file/model"
 	user_model "github.com/root9464/Hakaton_Zalupa/module/user/model"
 	"github.com/root9464/Hakaton_Zalupa/shared/logger"
 	"gorm.io/gorm"
@@ -12,6 +14,8 @@ func Migrate(db *gorm.DB, trigger bool, log *logger.Logger) error {
 		log.Info("📦 Migrating database...")
 		models := []interface{}{
 			&user_model.User{},
+			&file_model.File{},
+			&application_model.Application{},
 		}
 
 		log.Info("📦 Creating types...")
