@@ -10,6 +10,7 @@ import (
 
 type Config struct {
 	DatabaseUrl string `mapstructure:"DATABASE_URL"`
+	EXTERNAL_API string `mapstructure:"EXTERNAL_API"`
 
 	JwtPrivateKey string `mapstructure:"JWT_PRIVATE_KEY"`
 	JwtPublicKey  string `mapstructure:"JWT_PUBLIC_KEY"`
@@ -18,6 +19,7 @@ type Config struct {
 func validateConfig(config *Config) error {
 	configMap := map[string]interface{}{
 		"DATABASE_URL": config.DatabaseUrl,
+		"EXTERNAL_API": config.EXTERNAL_API,
 
 		"JWT_PRIVATE_KEY": config.JwtPrivateKey,
 		"JWT_PUBLIC_KEY":  config.JwtPublicKey,
