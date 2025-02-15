@@ -2,7 +2,7 @@ import { NavBar } from '@/components/NavBar';
 import { useEffect, useRef, useState } from 'react';
 
 type Point = { lat: number; lon: number };
-type PixelPosition = { x: number; y: number };
+export type PixelPosition = { x: number; y: number };
 
 const project = (lat: number, lon: number, zoom: number) => {
   const scale = 1 << zoom;
@@ -13,9 +13,8 @@ const project = (lat: number, lon: number, zoom: number) => {
   return { x, y };
 };
 
-const centerLon = 56.0525;
-const centerLat = 52.3898;
 const zoom = 10;
+const center: Point = { lat: 52.3898, lon: 56.0525 };
 
 const points: Point[] = [
   { lat: 52.335844, lon: 56.24909 },
@@ -23,32 +22,44 @@ const points: Point[] = [
   { lat: 52.509025, lon: 56.240041 },
 ];
 
-export default function MapPage() {
-  const containerRef = useRef<HTMLDivElement>(null);
+export const useMarkerPositions = (containerRef: React.RefObject<HTMLElement | null>, points: Point[], center: Point, zoom: number) => {
   const [markers, setMarkers] = useState<PixelPosition[]>([]);
 
   useEffect(() => {
-    if (!containerRef.current) return;
+    const container = containerRef.current;
+    if (!container) return;
 
-    const centerPixel = project(centerLat, centerLon, zoom);
-    const rect = containerRef.current.getBoundingClientRect();
-    const containerCenterX = rect.width / 2;
-    const containerCenterY = rect.height / 2;
+    const calculateMarkers = () => {
+      const rect = container.getBoundingClientRect();
+      const containerCenterX = rect.width / 2;
+      const containerCenterY = rect.height / 2;
+      const centerPixel = project(center.lat, center.lon, zoom);
 
-    console.log('Размер контейнера:', rect.width, rect.height);
+      const newMarkers = points.map((point) => {
+        const pointPixel = project(point.lat, point.lon, zoom);
+        return {
+          x: containerCenterX + (pointPixel.x - centerPixel.x),
+          y: containerCenterY + (pointPixel.y - centerPixel.y),
+        };
+      });
 
-    const newMarkers = points.map((point, index) => {
-      const pointPixel = project(point.lat, point.lon, zoom);
-      const markerX = containerCenterX + (pointPixel.x - centerPixel.x);
-      const markerY = containerCenterY + (pointPixel.y - centerPixel.y);
+      setMarkers(newMarkers);
+    };
 
-      console.log(`Маркер ${index + 1}:`, { x: markerX, y: markerY });
+    calculateMarkers();
+    const observer = new ResizeObserver(calculateMarkers);
+    observer.observe(container);
 
-      return { x: markerX, y: markerY };
-    });
+    return () => observer.disconnect();
+  }, [containerRef, points, center, zoom]);
 
-    setMarkers(newMarkers);
-  }, []);
+  return markers;
+};
+
+export default function MapPage() {
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  const markers = useMarkerPositions(containerRef, points, center, zoom);
 
   const handleMarkerClick = (index: number) => {
     console.log(`Клик по маркеру ${index + 1}`, points[index]);
