@@ -168,25 +168,31 @@ func (s *apiService) GetRecordByID(ctx context.Context, id string) (map[string]i
 
 
 func convertEPSG3857to4326(geom string) (string, error) {
-	geom = strings.TrimPrefix(geom, "POINT(")
-	geom = strings.TrimSuffix(geom, ")")
-	coords := strings.Split(geom, " ")
-	if len(coords) != 2 {
-		return "", fmt.Errorf("неверный формат координат: %s", geom)
-	}
+    // Удаляем "POINT(" и ")" из строки
+    geom = strings.TrimPrefix(geom, "POINT(")
+    geom = strings.TrimSuffix(geom, ")")
 
-	x, err := strconv.ParseFloat(coords[0], 64)
-	if err != nil {
-		return "", err
-	}
-	y, err := strconv.ParseFloat(coords[1], 64)
-	if err != nil {
-		return "", err
-	}
+    // Разделяем координаты по пробелу
+    coords := strings.Split(geom, " ")
+    if len(coords) != 2 {
+        return "", fmt.Errorf("неверный формат координат: %s", geom)
+    }
 
-	// EPSG:3857 to EPSG:4326
-	lon := x / 6378137.0 * 180.0
-	lat := (2*math.Atan(math.Exp(y/6378137.0*math.Pi/180.0)) - math.Pi/2) * 180.0 / math.Pi
+    // Парсим координаты
+    x, err := strconv.ParseFloat(coords[0], 64)
+    if err != nil {
+        return "", fmt.Errorf("ошибка парсинга координаты X: %v", err)
+    }
+    y, err := strconv.ParseFloat(coords[1], 64)
+    if err != nil {
+        return "", fmt.Errorf("ошибка парсинга координаты Y: %v", err)
+    }
 
-	return fmt.Sprintf("POINT(%f %f)", lon, lat), nil
+    // Преобразуем координаты из EPSG:3857 в EPSG:4326
+    const earthRadius = 6378137.0 // Радиус Земли в метрах
+    lon := (x / earthRadius) * (180 / math.Pi)
+    lat := (math.Atan(math.Exp(y / earthRadius)) * 2 - math.Pi/2) * (180 / math.Pi)
+
+    // Возвращаем координаты в формате "POINT(lon lat)"
+    return fmt.Sprintf("POINT(%f %f)", lon, lat), nil
 }
