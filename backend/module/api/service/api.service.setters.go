@@ -368,6 +368,53 @@ func (s *apiService) AttachingFile(ctx context.Context, recordID string, attachm
 
 	return response.ID, nil
 }
+func (s *apiService) DeleteAttachment(ctx context.Context, recordID string, attachmentID string) error {
+    // Формируем URL для удаления вложения
+    url := s.config.EXTERNAL_API + recordID +"/attachment/"+ attachmentID
+
+    // Создаем HTTP-запрос
+    req, err := http.NewRequest("DELETE", url, nil)
+    if err != nil {
+        s.logger.Infof("Ошибка при создании запроса: %s", err)
+        return &fiber.Error{
+            Code:    fiber.StatusInternalServerError,
+            Message: err.Error(),
+        }
+    }
+
+    // Добавляем заголовки
+    req.Header.Set("Accept", "*/*")
+    req.Header.Set("Authorization", authString())
+
+    // Выполняем запрос
+    client := &http.Client{}
+    resp, err := client.Do(req)
+    if err != nil {
+        s.logger.Infof("Ошибка при выполнении запроса: %s", err)
+        return &fiber.Error{
+            Code:    fiber.StatusInternalServerError,
+            Message: err.Error(),
+        }
+    }
+    defer resp.Body.Close()
+
+    // Читаем тело ответа
+    body, err := io.ReadAll(resp.Body)
+    if err != nil {
+        s.logger.Infof("Ошибка при чтении тела ответа: %s", err)
+        return err
+    }
+
+    s.logger.Infof("Статус ответа: %s", resp.Status)
+    s.logger.Infof("Тело ответа: %s", string(body))
+
+    // Проверяем статус ответа
+    if resp.StatusCode >= 400 {
+        return fmt.Errorf("ошибка сервера: %s, тело ответа: %s", resp.Status, string(body))
+    }
+
+    return nil
+}
 
 func authString() string {
 	auth := "hackathon_15:hackathon_15_25"

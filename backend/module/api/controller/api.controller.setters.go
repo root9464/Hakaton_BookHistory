@@ -137,7 +137,6 @@ func (c *ApiController) UploadAttachment(ctx *fiber.Ctx) error {
         "data":    uploadMeta,
     })
 }
-
 func (c *ApiController) AttachingFile(ctx *fiber.Ctx) error {
     // Получаем ID записи из параметров запроса
     recordID := ctx.Params("id")
@@ -179,5 +178,36 @@ func (c *ApiController) AttachingFile(ctx *fiber.Ctx) error {
         "data": fiber.Map{
             "id": attachmentID,
         },
+    })
+}
+
+func (c *ApiController) DeleteAttachment(ctx *fiber.Ctx) error {
+    // Получаем ID записи и ID вложения из параметров запроса
+    recordID := ctx.Params("record_id")
+    attachmentID := ctx.Params("attachment_id")
+    if recordID == "" || attachmentID == "" {
+        c.logger.Info("01")
+        return ctx.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+            "status":  "failed",
+            "message": "ID записи или ID вложения не указан",
+        })
+    }
+
+    c.logger.Infof("DeleteAttachment: RecordID=%s, AttachmentID=%s", recordID, attachmentID)
+
+    // Вызываем метод сервиса для удаления вложения
+    err := c.apiService.DeleteAttachment(ctx.Context(), recordID, attachmentID)
+    if err != nil {
+        c.logger.Info("02")
+        return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+            "status":  "failed",
+            "message": err.Error(),
+        })
+    }
+
+    // Возвращаем успешный ответ
+    return ctx.Status(fiber.StatusOK).JSON(fiber.Map{
+        "status":  "success",
+        "message": "attachment deleted successfully",
     })
 }

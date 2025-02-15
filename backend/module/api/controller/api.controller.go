@@ -26,8 +26,8 @@ type IApiController interface {
 	// Прикрепление файла к записи из пункта 3
 	AttachingFile(ctx *fiber.Ctx) error
 
-	// //Удаление вложения
-	// DeleteAttachment(ctx *fiber.Ctx) error
+	//Удаление вложения
+	DeleteAttachment(ctx *fiber.Ctx) error
 
 	
 }

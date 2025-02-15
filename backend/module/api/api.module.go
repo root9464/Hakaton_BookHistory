@@ -49,5 +49,7 @@ func (m *ApiModule) AuthRoutes(router fiber.Router) {
 	auth.Post("/upload", m.ApiController().UploadAttachment)
 	auth.Post("/attach/:id", m.ApiController().AttachingFile)
 
+	auth.Delete("/delete/:record_id/:attachment_id", m.ApiController().DeleteAttachment)
+
 	
 }

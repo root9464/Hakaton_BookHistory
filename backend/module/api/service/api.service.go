@@ -19,6 +19,7 @@ type IApiService interface {
 
 	UploadAttachment(ctx context.Context, file *multipart.FileHeader, fileName string) ([]map[string]interface{}, error)
 	AttachingFile(ctx context.Context, recordID string, attachmentRequest api_dto.AttachmentRequest) (int, error)
+	DeleteAttachment(ctx context.Context, recordID string, attachmentID string) error
 }
 
 type apiService struct {
