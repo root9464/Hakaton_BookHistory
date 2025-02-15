@@ -18,6 +18,7 @@ type IApplicationService interface {
 	Create(ctx context.Context, application *application_dto.CreateApplicationDto, files *file_dto.CreateManyFileDto) error
 	GetAll(ctx context.Context) ([]application_model.Application, error)
 	UpdateStatus(ctx context.Context, id string, dto *application_dto.UpdateStatus) error
+	SendEmail(ctx context.Context, email *application_dto.Email) error
 }
 
 type ApplicationService struct {

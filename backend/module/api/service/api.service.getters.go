@@ -15,7 +15,15 @@ import (
 	api_dto "github.com/root9464/Hakaton_Zalupa/module/api/dto"
 )
 
-func (s *apiService) GetRecord(ctx context.Context) ([]api_dto.Feature, error) {
+type UserResponse struct {
+	UserID int `json:"userID"`
+	Coords struct {
+		Lat float64 `json:"lat"`
+		Lon float64 `json:"lon"`
+	} `json:"cords"`
+}
+
+func (s *apiService) GetRecord(ctx context.Context) ([]UserResponse, error) {
 	req, err := http.NewRequest("GET", s.config.EXTERNAL_API, nil)
 	if err != nil {
 		s.logger.Infof("Ошибка при создании запроса: %s", err)
@@ -59,27 +67,48 @@ func (s *apiService) GetRecord(ctx context.Context) ([]api_dto.Feature, error) {
 		return nil, err
 	}
 
-	// Конвертация координат geom в EPSG:3857
-	for i, feature := range features {
+	var results []UserResponse
+
+	for _, feature := range features {
 		if feature.Geom != "" {
 			convertedGeom, err := convertEPSG3857to4326(feature.Geom)
 			if err != nil {
 				s.logger.Infof("Ошибка при конвертации geom: %s", err)
 				return nil, err
 			}
-			features[i].Geom = convertedGeom
+
+			// Разбираем координаты
+			convertedGeom = strings.TrimPrefix(convertedGeom, "POINT(")
+			convertedGeom = strings.TrimSuffix(convertedGeom, ")")
+			parts := strings.Split(convertedGeom, " ")
+			if len(parts) != 2 {
+				return nil, fmt.Errorf("неверный формат координат: %s", convertedGeom)
+			}
+
+			lon, err := strconv.ParseFloat(parts[0], 64)
+			if err != nil {
+				return nil, fmt.Errorf("ошибка при парсинге долготы: %s", err)
+			}
+
+			lat, err := strconv.ParseFloat(parts[1], 64)
+			if err != nil {
+				return nil, fmt.Errorf("ошибка при парсинге широты: %s", err)
+			}
+
+			results = append(results, UserResponse{
+				UserID: feature.ID,
+				Coords: struct {
+					Lat float64 `json:"lat"`
+					Lon float64 `json:"lon"`
+				}{
+					Lat: lat,
+					Lon: lon,
+				},
+			})
 		}
 	}
 
-	return features, nil
-}
-
-type UserResponse struct {
-	UserID string `json:"userID"`
-	Coords struct {
-		Lat float64 `json:"lat"`
-		Lon float64 `json:"lon"`
-	} `json:"cords"`
+	return results, nil
 }
 
 func (s *apiService) GetRecordByID(ctx context.Context, id string) (map[string]interface{}, error) {
@@ -166,33 +195,32 @@ func (s *apiService) GetRecordByID(ctx context.Context, id string) (map[string]i
 	}
 }
 
-
 func convertEPSG3857to4326(geom string) (string, error) {
-    // Удаляем "POINT(" и ")" из строки
-    geom = strings.TrimPrefix(geom, "POINT(")
-    geom = strings.TrimSuffix(geom, ")")
+	// Удаляем "POINT(" и ")" из строки
+	geom = strings.TrimPrefix(geom, "POINT(")
+	geom = strings.TrimSuffix(geom, ")")
 
-    // Разделяем координаты по пробелу
-    coords := strings.Split(geom, " ")
-    if len(coords) != 2 {
-        return "", fmt.Errorf("неверный формат координат: %s", geom)
-    }
+	// Разделяем координаты по пробелу
+	coords := strings.Split(geom, " ")
+	if len(coords) != 2 {
+		return "", fmt.Errorf("неверный формат координат: %s", geom)
+	}
 
-    // Парсим координаты
-    x, err := strconv.ParseFloat(coords[0], 64)
-    if err != nil {
-        return "", fmt.Errorf("ошибка парсинга координаты X: %v", err)
-    }
-    y, err := strconv.ParseFloat(coords[1], 64)
-    if err != nil {
-        return "", fmt.Errorf("ошибка парсинга координаты Y: %v", err)
-    }
+	// Парсим координаты
+	x, err := strconv.ParseFloat(coords[0], 64)
+	if err != nil {
+		return "", fmt.Errorf("ошибка парсинга координаты X: %v", err)
+	}
+	y, err := strconv.ParseFloat(coords[1], 64)
+	if err != nil {
+		return "", fmt.Errorf("ошибка парсинга координаты Y: %v", err)
+	}
 
-    // Преобразуем координаты из EPSG:3857 в EPSG:4326
-    const earthRadius = 6378137.0 // Радиус Земли в метрах
-    lon := (x / earthRadius) * (180 / math.Pi)
-    lat := (math.Atan(math.Exp(y / earthRadius)) * 2 - math.Pi/2) * (180 / math.Pi)
+	// Преобразуем координаты из EPSG:3857 в EPSG:4326
+	const earthRadius = 6378137.0 // Радиус Земли в метрах
+	lon := (x / earthRadius) * (180 / math.Pi)
+	lat := (math.Atan(math.Exp(y/earthRadius))*2 - math.Pi/2) * (180 / math.Pi)
 
-    // Возвращаем координаты в формате "POINT(lon lat)"
-    return fmt.Sprintf("POINT(%f %f)", lon, lat), nil
+	// Возвращаем координаты в формате "POINT(lon lat)"
+	return fmt.Sprintf("POINT(%f %f)", lon, lat), nil
 }
