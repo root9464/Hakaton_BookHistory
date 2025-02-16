@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  backend:
+    build: ./backend
+    container_name: backend
+    ports:
+      - "6069:6069"
+    volumes:
+      - ./backend/image:/app/image
+    networks:
+      - app-network  # Используем сеть для связи между сервисами
+
+  elk:
+    build: ./elk
+    container_name: elk
+    ports:
+      - "8080:8080"
+    networks:
+      - app-network
+
+networks:
+  app-network:  # Создаем сеть для связи между сервисами
+    driver: bridge
