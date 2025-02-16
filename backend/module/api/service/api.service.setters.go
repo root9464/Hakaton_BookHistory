@@ -328,7 +328,7 @@ func (s *apiService) AttachingFile(ctx context.Context, recordID string, attachm
 	// Добавляем заголовки
 	req.Header.Set("Accept", "*/*")
 	req.Header.Set("Authorization", authString())
-	req.Header.Set("Content-Type", "image/jpeg")
+	req.Header.Set("Content-Type", "image/jpeg") // Заголовок нихуя не раьотает ебашим через постман
 	
 
 	// Выполняем запрос

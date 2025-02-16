@@ -32,6 +32,9 @@ type IApiController interface {
 
 	//Удаление вложения
 	DeleteAttachment(ctx *fiber.Ctx) error
+
+	//получение художественной информации
+	GetArtInfo(ctx *fiber.Ctx) error
 }
 
 type ApiController struct {

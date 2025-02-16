@@ -33,10 +33,16 @@ func (c *ApiController) GetFullRecordByID(ctx *fiber.Ctx) error {
 			"message": err.Error(),
 		})
 	}
-	return ctx.Status(fiber.StatusOK).JSON(fiber.Map{
-		"data": fiber.Map{
-			"result": resp,
-		},
-	})
+	return ctx.Status(fiber.StatusOK).JSON(resp)
 }
 
+func (c *ApiController) GetArtInfo(ctx *fiber.Ctx) error {
+	resp, err := c.apiService.GetArtInfo(ctx.Context(), ctx.Params("id"))
+	if err != nil {
+		return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"status":  "failed",
+			"message": err.Error(),
+		})
+	}
+	return ctx.Status(fiber.StatusOK).JSON(resp)
+}

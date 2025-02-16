@@ -54,5 +54,8 @@ func (m *ApiModule) AuthRoutes(router fiber.Router) {
 
 	auth.Delete("/delete/:record_id/:attachment_id", m.ApiController().DeleteAttachment)
 
+	//художественный формат
+	auth.Get("art", m.ApiController().GetArtInfo)
+
 	
 }

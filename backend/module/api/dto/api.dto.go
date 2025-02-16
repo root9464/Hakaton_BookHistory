@@ -23,14 +23,15 @@ type FeatureCord struct {
 	} `json:"extensions,omitempty"`
 }
 
+
 type Fields struct {
-	Num      float64 `json:"num"`                // Номер записи
-	Region   string  `json:"n_raion"`            // Муниципальное образование
-	FullName string  `json:"fio"`                // ФИО
-	Years    string  `json:"years"`              // Годы жизни
-	Info     string  `json:"info,omitempty"`     // Биография
-	Conflict string  `json:"kontrakt,omitempty"` // Вооруженный конфликт
-	Awards   string  `json:"nagrads,omitempty"`  // Награды
+	UUID     string `json:"uuid"`               // Номер записи
+	Region   string `json:"n_raion"`            // Муниципальное образование
+	FullName string `json:"fio"`                // ФИО
+	Years    string `json:"years"`              // Годы жизни
+	Info     string `json:"info,omitempty"`     // Биография
+	Conflict string `json:"kontrakt,omitempty"` // Вооруженный конфликт
+	Awards   string `json:"nagrads,omitempty"`  // Награды
 }
 
 type Attachment struct {
