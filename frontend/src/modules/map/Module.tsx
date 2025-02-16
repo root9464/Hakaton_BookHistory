@@ -21,7 +21,7 @@ export const MapModule = () => {
   const [coordinates, setCoordinates] = useState('');
 
   const points = useMemo(() => {
-    return data ? data.map((item) => ({ lat: item.cords.lat, lon: item.cords.lon, id: String(item.userID) })) : [];
+    return data ? data.map((item) => ({ lat: item.cords.lat, lon: item.cords.lon, id: String(item.id) })) : [];
   }, [data]);
 
   const markers = useMarkerPositions(containerRef, points, center, zoom);

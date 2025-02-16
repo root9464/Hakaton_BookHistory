@@ -106,7 +106,9 @@ func (s *apiService) GetRecords(ctx context.Context) ([]api_dto.FeatureCord, err
 				},
 			}
 
-			results = append(results, featureCord)
+			if featureCord.ID != "" {
+				results = append(results, featureCord)
+			}
 		}
 	}
 

@@ -4,7 +4,7 @@ import axios from 'axios';
 import { z } from 'zod';
 
 const UserSchema = z.object({
-  userID: z.number(),
+  id: z.string(),
   cords: z.object({
     lat: z.number(),
     lon: z.number(),
