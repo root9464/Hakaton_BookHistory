@@ -1,5 +1,5 @@
 import { UserLoginResponse } from '@/modules/auth/hooks/useAuth';
-import { Button, Input, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, useDisclosure } from '@heroui/react';
+import { Button, Input, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader } from '@heroui/react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useQueryClient } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
@@ -32,8 +32,14 @@ const fields = [
   { name: 'files', label: 'Файл', placeholder: 'Выберите файл', type: 'file' },
 ];
 
-export const OrderModal = () => {
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+type OrderModalProps = {
+  isOpen: boolean;
+  onOpen: () => void;
+  onOpenChange: () => void;
+  coordinates: string;
+};
+
+export const OrderModal = ({ isOpen, onOpen, onOpenChange, coordinates }: OrderModalProps) => {
   const {
     register,
     handleSubmit,
@@ -54,6 +60,7 @@ export const OrderModal = () => {
       files: undefined,
     },
   });
+
   const queryClient = useQueryClient();
 
   const cacheUserLoginData: UserLoginResponse | undefined = queryClient.getQueryData(['user']);
@@ -62,7 +69,7 @@ export const OrderModal = () => {
 
   const onSubmit = (data: OrderFormData) => {
     const formData = new FormData();
-    Object.entries({ ...data, sender_id: cacheUserLoginData?.data.id ?? '' }).forEach(([key, value]) =>
+    Object.entries({ ...data, sender_id: cacheUserLoginData?.data.id ?? '', geom: coordinates }).forEach(([key, value]) =>
       value instanceof FileList ? Array.from(value).forEach((file) => formData.append(key, file)) : formData.append(key, value as string),
     );
     console.log(data, 'data');
@@ -77,7 +84,7 @@ export const OrderModal = () => {
         Create
       </button>
       <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
-        <ModalContent>
+        <ModalContent className='z-[2]'>
           {(onClose) => (
             <>
               <ModalHeader className='flex flex-col gap-1'>Создание записи</ModalHeader>

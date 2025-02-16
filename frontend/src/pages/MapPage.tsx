@@ -3,7 +3,7 @@ import { ToolsModule } from '@/modules/tools/Module';
 
 export default function MapPage() {
   return (
-    <div className='relative flex h-screen w-full items-center justify-center overflow-x-hidden'>
+    <div className='relative flex h-screen w-full items-center justify-center overflow-hidden'>
       <MapModule />
 
       <div className='absolute top-0 z-[1] h-max w-max bg-transparent'>
