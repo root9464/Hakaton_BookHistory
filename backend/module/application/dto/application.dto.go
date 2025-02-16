@@ -19,10 +19,7 @@ type UpdateStatus struct {
 }
 
 type Email struct {
-	Email     string `json:"email" validate:"required,email"`
-	Password string `json:"password"`
 	Message  string `json:"message" validate:"required"`
 }
 
-type EmailService struct {
-}
+

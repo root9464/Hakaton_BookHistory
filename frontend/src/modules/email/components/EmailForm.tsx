@@ -23,10 +23,12 @@ export const EmailForm = () => {
     },
   });
 
-  const { data, mutate } = useEmail();
-  console.log(data);
+  const { mutate } = useEmail();
 
-  const onSubmit = (data: EmailData) => mutate(data);
+  const onSubmit = (data: EmailData) => {
+    mutate(data);
+    console.log(data);
+  };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className='flex flex-col gap-5'>

@@ -77,21 +77,24 @@ func (s *ApplicationService) UpdateStatus(ctx context.Context, id string, dto *a
 }
 
 func (s *ApplicationService) SendEmail(ctx context.Context, dto *application_dto.Email) error {
-	if err := s.validator.Struct(dto); err != nil {
-		s.logger.Warnf("validation error: %v", err)
-		return &fiber.Error{
-			Code:    400,
-			Message: err.Error(),
-		}
-	}
+	// if err := s.validator.Struct(dto); err != nil {
+	// 	s.logger.Warnf("validation error: %v", err)
+	// 	return &fiber.Error{
+	// 		Code:    400,
+	// 		Message: err.Error(),
+	// 	}
+	// }
 
 	host := "smtp.gmail.com"
 	port := "587"
 	to := []string{"ivanbatutin6002@mail.ru"}
 
-	auth := smtp.PlainAuth("", dto.Email, dto.Password, host)
+	from := "fakeroot94@gmail.com"
+	password := "memm cchg tscz gioi"
 
-	err := smtp.SendMail(host+":"+port, auth, dto.Email, to, []byte(dto.Message))
+	auth := smtp.PlainAuth("", from, password, host)
+
+	err := smtp.SendMail(host+":"+port, auth, from, to, []byte(dto.Message))
 	if err != nil {
 		s.logger.Errorf("error sending email: %v", err)
 		return &fiber.Error{
