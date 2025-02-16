@@ -192,7 +192,6 @@ func (s *apiService) UpdateRecord(ctx context.Context, id string, dto *api_dto.C
 }
 
 func (s *apiService) UploadAttachment(ctx context.Context, file *multipart.FileHeader, fileName string) ([]map[string]interface{}, error) {
-    // Открываем файл
     src, err := file.Open()
     if err != nil {
         s.logger.Infof("Ошибка при открытии файла: %s", err)
@@ -203,11 +202,9 @@ func (s *apiService) UploadAttachment(ctx context.Context, file *multipart.FileH
     }
     defer src.Close()
 
-    // Создаем буфер для хранения данных файла
     body := &bytes.Buffer{}
     writer := multipart.NewWriter(body)
 
-    // Добавляем файл в форму
     part, err := writer.CreateFormFile("file", fileName)
     if err != nil {
         s.logger.Infof("Ошибка при создании формы для файла: %s", err)
@@ -217,7 +214,6 @@ func (s *apiService) UploadAttachment(ctx context.Context, file *multipart.FileH
         }
     }
 
-    // Копируем содержимое файла в часть формы
     if _, err := io.Copy(part, src); err != nil {
         s.logger.Infof("Ошибка при копировании файла: %s", err)
         return nil, &fiber.Error{
@@ -226,7 +222,6 @@ func (s *apiService) UploadAttachment(ctx context.Context, file *multipart.FileH
         }
     }
 
-    // Добавляем поле "name" (если нужно)
     if err := writer.WriteField("name", fileName); err != nil {
         s.logger.Infof("Ошибка при добавлении поля name: %s", err)
         return nil, &fiber.Error{
@@ -235,8 +230,12 @@ func (s *apiService) UploadAttachment(ctx context.Context, file *multipart.FileH
         }
     }
 
-    // Добавляем поле "mime_type"
     fileType := file.Header.Get("Content-Type")
+	// if fileType == "" {
+	// 	fileType = "image/jpeg" 
+	// }
+	
+    s.logger.Infof("MIME-тип файла: %s", fileType)
     if err := writer.WriteField("mime_type", fileType); err != nil {
         s.logger.Infof("Ошибка при добавлении поля mime_type: %s", err)
         return nil, &fiber.Error{
@@ -245,7 +244,6 @@ func (s *apiService) UploadAttachment(ctx context.Context, file *multipart.FileH
         }
     }
 
-    // Закрываем writer
     if err := writer.Close(); err != nil {
         s.logger.Infof("Ошибка при закрытии writer: %s", err)
         return nil, &fiber.Error{
@@ -254,10 +252,7 @@ func (s *apiService) UploadAttachment(ctx context.Context, file *multipart.FileH
         }
     }
 
-    // Формируем URL для загрузки файла
     url := "https://geois2.orb.ru/api/component/file_upload/"
-
-    // Создаем HTTP-запрос
     req, err := http.NewRequest("POST", url, body)
     if err != nil {
         s.logger.Infof("Ошибка при создании запроса: %s", err)
@@ -267,12 +262,10 @@ func (s *apiService) UploadAttachment(ctx context.Context, file *multipart.FileH
         }
     }
 
-    // Добавляем заголовки
     req.Header.Set("Accept", "*/*")
     req.Header.Set("Authorization", authString())
     req.Header.Set("Content-Type", writer.FormDataContentType())
 
-    // Выполняем запрос
     client := &http.Client{}
     resp, err := client.Do(req)
     if err != nil {
@@ -284,7 +277,6 @@ func (s *apiService) UploadAttachment(ctx context.Context, file *multipart.FileH
     }
     defer resp.Body.Close()
 
-    // Читаем тело ответа
     responseBody, err := io.ReadAll(resp.Body)
     if err != nil {
         s.logger.Infof("Ошибка при чтении тела ответа: %s", err)
@@ -294,12 +286,10 @@ func (s *apiService) UploadAttachment(ctx context.Context, file *multipart.FileH
     s.logger.Infof("Статус ответа: %s", resp.Status)
     s.logger.Infof("Тело ответа: %s", string(responseBody))
 
-    // Проверяем статус ответа
     if resp.StatusCode >= 400 {
         return nil, fmt.Errorf("ошибка сервера: %s, тело ответа: %s", resp.Status, string(responseBody))
     }
 
-    // Десериализуем ответ
     var result map[string][]map[string]interface{}
     if err := json.Unmarshal(responseBody, &result); err != nil {
         s.logger.Infof("Ошибка при десериализации ответа: %s", err)
@@ -338,7 +328,8 @@ func (s *apiService) AttachingFile(ctx context.Context, recordID string, attachm
 	// Добавляем заголовки
 	req.Header.Set("Accept", "*/*")
 	req.Header.Set("Authorization", authString())
-	req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("Content-Type", "image/jpeg") // Заголовок нихуя не раьотает ебашим через постман
+	
 
 	// Выполняем запрос
 	client := &http.Client{}

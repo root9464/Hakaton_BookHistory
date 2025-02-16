@@ -13,14 +13,17 @@ var _ IApiService = (*apiService)(nil)
 
 type IApiService interface {
 	CreateRecord(ctx context.Context, dto *api_dto.CreateFeatureRequest) (*api_dto.CreateFeatureResponse, error)
-	GetRecord(ctx context.Context) ([]UserResponse, error)
+	GetRecords(ctx context.Context) ([]api_dto.FeatureCord, error)
 	GetRecordByID(ctx context.Context, id string) (map[string]interface{}, error)
+	GetFullRecordByID(ctx context.Context, id string) (*api_dto.Feature, error)
 	DeleteRecord(ctx context.Context, ids []api_dto.CreateFeatureResponse) error
 	UpdateRecord(ctx context.Context, id string, dto *api_dto.CreateFeatureRequest) error
 
 	UploadAttachment(ctx context.Context, file *multipart.FileHeader, fileName string) ([]map[string]interface{}, error)
 	AttachingFile(ctx context.Context, recordID string, attachmentRequest api_dto.AttachmentRequest) (int, error)
 	DeleteAttachment(ctx context.Context, recordID string, attachmentID string) error
+
+	GetArtInfo(ctx context.Context, id string) (*api_dto.Feature, error)
 }
 
 type apiService struct {

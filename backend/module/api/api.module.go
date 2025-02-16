@@ -41,8 +41,10 @@ func (m *ApiModule) ApiController() api_controller.IApiController {
 func (m *ApiModule) AuthRoutes(router fiber.Router) {
 	auth := router.Group("/exapi")
 
-	auth.Get("/get", m.ApiController().GetRecord)
+	auth.Get("/get", m.ApiController().GetRecords)
 	auth.Get("/get/:id", m.ApiController().GetRecordByID)
+	auth.Get("/get-full/:id", m.ApiController().GetFullRecordByID)
+
 	auth.Post("/create", m.ApiController().CreateRecord)
 	auth.Delete("/delete", m.ApiController().DeleteRecord)
 	auth.Put("/update/:id", m.ApiController().UpadateRecord)
@@ -51,6 +53,9 @@ func (m *ApiModule) AuthRoutes(router fiber.Router) {
 	auth.Post("/attach/:id", m.ApiController().AttachingFile)
 
 	auth.Delete("/delete/:record_id/:attachment_id", m.ApiController().DeleteAttachment)
+
+	//художественный формат
+	auth.Get("art", m.ApiController().GetArtInfo)
 
 	
 }
