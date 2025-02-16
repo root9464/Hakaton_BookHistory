@@ -89,8 +89,8 @@ export const OrderModal = ({ isOpen, onOpen, onOpenChange, coordinates }: OrderM
       <button onClick={onOpen} className='flex h-fit w-fit flex-row items-center justify-center bg-transparent text-white'>
         Create
       </button>
-      <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
-        <ModalContent className='z-[1]'>
+      <Modal isOpen={isOpen} onOpenChange={onOpenChange} inert={false} className='z-[2]'>
+        <ModalContent>
           {(onClose) => (
             <>
               <ModalHeader className='flex flex-col gap-1'>Создание записи</ModalHeader>

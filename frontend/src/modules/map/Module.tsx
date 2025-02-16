@@ -27,6 +27,7 @@ export const MapModule = () => {
   const markers = useMarkerPositions(containerRef, points, center, zoom);
 
   const handleClick = (event: React.MouseEvent<HTMLDivElement>) => {
+    event.stopPropagation();
     const container = containerRef.current;
     if (!container) return;
 
@@ -52,15 +53,14 @@ export const MapModule = () => {
 
   return (
     <div className='relative h-full w-full'>
-      <div className='h-full w-full' ref={containerRef} onClick={handleClick}>
+      <div className='relative h-full w-full' ref={containerRef} onClick={handleClick}>
         <iframe
           src={`https://geois2.orb.ru/resource/8888/display/tiny?base=basemap_0&lon=${center.lon}&lat=${center.lat}&angle=0&zoom=${zoom}`}
           className='pointer-events-none z-0 h-full w-full'
         />
-        <Marker markers={markers} />
+        <OrderModal isOpen={isOpen} onOpen={onOpen} onOpenChange={onOpenChange} coordinates={coordinates} />
       </div>
-
-      <OrderModal isOpen={isOpen} onOpen={onOpen} onOpenChange={onOpenChange} coordinates={coordinates} />
+      <Marker markers={markers} />
     </div>
   );
 };

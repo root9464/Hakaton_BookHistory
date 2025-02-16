@@ -16,7 +16,7 @@ export const AncestorModal = ({ isOpen, onOpenChange, coordinates, children }: A
   return (
     <>
       {children}
-      <Modal isOpen={isOpen} onOpenChange={onOpenChange} size='full' className='z-[2]'>
+      <Modal isOpen={isOpen} onOpenChange={onOpenChange} size='full' className='z-[1]' inert>
         <ModalContent>
           {(onClose) => (
             <>
