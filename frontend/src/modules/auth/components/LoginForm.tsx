@@ -67,7 +67,7 @@ export const LoginForm = () => {
       <div className='col-span-2 flex w-1/2 flex-col items-center justify-center place-self-center'>
         <div className='flex flex-row gap-4 text-xs font-medium text-blue-600'>
           <Link to={'/register'}>Пока нету аккаунта</Link>
-          <Link to='.'>Войти через гос услуги</Link>
+          <Link to='/'>Войти через гос услуги</Link>
         </div>
         <Button type='submit' className='mt-4 bg-uiDeepGray p-2 text-white'>
           Зарегистрироваться
