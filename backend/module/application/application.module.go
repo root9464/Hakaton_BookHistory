@@ -60,4 +60,5 @@ func (m *ApplicationModule) ApplicationRoutes(router fiber.Router) {
 	application.Get("/", m.ApplicationController().GetAll)
 	application.Put("/:id", m.ApplicationController().UpdateStatus)
 	application.Post("/email", m.ApplicationController().SendEmail)
+	application.Get("/:id", m.ApplicationController().GetByID)
 }

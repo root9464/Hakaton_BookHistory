@@ -14,6 +14,7 @@ type IApplicationController interface {
 	UpdateStatus(ctx *fiber.Ctx) error
 
 	SendEmail(ctx *fiber.Ctx) error
+	GetByID(ctx *fiber.Ctx) error
 }
 
 type ApplicationController struct {

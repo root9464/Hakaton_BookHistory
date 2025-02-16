@@ -19,3 +19,16 @@ func (s *ApplicationService) GetAll(ctx context.Context) ([]application_model.Ap
 
 	return applications, nil
 }
+
+func (s *ApplicationService) GetByID(ctx context.Context, id string) (*application_model.Application, error) {
+	application, err := s.repo.GetByID(ctx, id)
+	if err != nil {
+		s.logger.Errorf("error getting application: %v", err)
+		return nil, &fiber.Error{
+			Code:    500,
+			Message: err.Error(),
+		}
+	}
+
+	return application, nil
+}

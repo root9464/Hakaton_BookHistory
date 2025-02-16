@@ -19,6 +19,7 @@ type IApplicationService interface {
 	GetAll(ctx context.Context) ([]application_model.Application, error)
 	UpdateStatus(ctx context.Context, id string, dto *application_dto.UpdateStatus) error
 	SendEmail(ctx context.Context, email *application_dto.Email) error
+	GetByID(ctx context.Context, id string) (*application_model.Application, error)
 }
 
 type ApplicationService struct {

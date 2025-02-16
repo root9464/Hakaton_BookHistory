@@ -14,3 +14,12 @@ func (r *ApplicationRepository) GetAll(ctx context.Context) ([]application_model
 	}
 	return applications, nil
 }
+
+func (r *ApplicationRepository) GetByID(ctx context.Context, id string) (*application_model.Application, error) {
+	var application application_model.Application
+	if err := r.db.Preload("Files").First(&application, "id = ?", id).Error; err != nil {
+		r.logger.Errorf("error getting application: %v", err)
+		return nil, err
+	}
+	return &application, nil
+}
