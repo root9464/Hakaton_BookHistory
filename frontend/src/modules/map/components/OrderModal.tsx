@@ -1,10 +1,11 @@
 import { UserLoginResponse } from '@/modules/auth/hooks/useAuth';
-import { Button, Input, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader } from '@heroui/react';
+import { Button, Input, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, Select, SelectItem } from '@heroui/react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useQueryClient } from '@tanstack/react-query';
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { useOrder } from '../hook/useOrder';
+import { useRewards } from '../hook/useRewards';
 
 const OrderFormSchema = z.object({
   fio: z.string().min(1, 'ФИО обязательно для заполнения'),
@@ -16,6 +17,7 @@ const OrderFormSchema = z.object({
   burial_place: z.string().min(1, 'Место захоронения обязательно для заполнения'),
   biographical_facts: z.string().min(1, 'Биографические факты обязательны для заполнения'),
   files: z.instanceof(FileList).refine((files) => files.length > 0, 'Файл обязателен для загрузки'),
+  rewards: z.string().min(1, 'Награда обязательна для выбора'),
 });
 
 export type OrderFormData = z.infer<typeof OrderFormSchema>;
@@ -43,6 +45,7 @@ export const OrderModal = ({ isOpen, onOpen, onOpenChange, coordinates }: OrderM
   const {
     register,
     handleSubmit,
+    control,
     formState: { errors },
     trigger,
     reset,
@@ -58,6 +61,8 @@ export const OrderModal = ({ isOpen, onOpen, onOpenChange, coordinates }: OrderM
       burial_place: '',
       biographical_facts: '',
       files: undefined,
+
+      rewards: '',
     },
   });
 
@@ -66,7 +71,7 @@ export const OrderModal = ({ isOpen, onOpen, onOpenChange, coordinates }: OrderM
   const cacheUserLoginData: UserLoginResponse | undefined = queryClient.getQueryData(['user']);
 
   const { mutate } = useOrder();
-
+  const { data: Rewards, isSuccess } = useRewards();
   const onSubmit = (data: OrderFormData) => {
     const formData = new FormData();
     Object.entries({ ...data, sender_id: cacheUserLoginData?.data.id ?? '', geom: coordinates }).forEach(([key, value]) =>
@@ -115,6 +120,31 @@ export const OrderModal = ({ isOpen, onOpen, onOpenChange, coordinates }: OrderM
                       onBlur={() => trigger(name as keyof OrderFormData)}
                     />
                   ))}
+
+                  {Rewards && isSuccess && (
+                    <Controller
+                      name='rewards'
+                      control={control}
+                      render={({ field }) => (
+                        <Select
+                          {...field}
+                          className='w-full'
+                          label='Возможные награды'
+                          selectionMode='multiple'
+                          onSelectionChange={(keys) => {
+                            const selectedIds = Array.from(keys).join(',');
+                            field.onChange(selectedIds);
+                          }}
+                        >
+                          {Rewards.data.map(({ id, name }) => (
+                            <SelectItem key={id} value={String(id)}>
+                              {name}
+                            </SelectItem>
+                          ))}
+                        </Select>
+                      )}
+                    />
+                  )}
                 </ModalBody>
                 <ModalFooter>
                   <Button color='danger' variant='light' onPress={onClose} type='reset'>
