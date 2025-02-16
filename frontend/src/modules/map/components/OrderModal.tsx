@@ -1,5 +1,5 @@
 import { UserLoginResponse } from '@/modules/auth/hooks/useAuth';
-import { Button, Input, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, Select, SelectItem } from '@heroui/react';
+import { Button, Input, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, Select, SelectItem, Skeleton } from '@heroui/react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useQueryClient } from '@tanstack/react-query';
 import { Controller, useForm } from 'react-hook-form';
@@ -71,7 +71,8 @@ export const OrderModal = ({ isOpen, onOpen, onOpenChange, coordinates }: OrderM
   const cacheUserLoginData: UserLoginResponse | undefined = queryClient.getQueryData(['user']);
 
   const { mutate } = useOrder();
-  const { data: Rewards, isSuccess } = useRewards();
+  const { data: Rewards, isSuccess, isLoading, isError, error } = useRewards();
+
   const onSubmit = (data: OrderFormData) => {
     const formData = new FormData();
     Object.entries({ ...data, sender_id: cacheUserLoginData?.data.id ?? '', geom: coordinates }).forEach(([key, value]) =>
@@ -145,6 +146,8 @@ export const OrderModal = ({ isOpen, onOpen, onOpenChange, coordinates }: OrderM
                       )}
                     />
                   )}
+                  {isLoading && <Skeleton className='h-[40px] w-full' />}
+                  {isError && <p>{error?.message}</p>}
                 </ModalBody>
                 <ModalFooter>
                   <Button color='danger' variant='light' onPress={onClose} type='reset'>
