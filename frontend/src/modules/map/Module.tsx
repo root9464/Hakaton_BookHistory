@@ -26,10 +26,6 @@ export const MapModule = () => {
 
   const markers = useMarkerPositions(containerRef, points, center, zoom);
 
-  const handleMarkerClick = (index: number) => {
-    console.log(`Клик по маркеру ${index + 1}`, points[index]);
-  };
-
   const handleClick = (event: React.MouseEvent<HTMLDivElement>) => {
     const container = containerRef.current;
     if (!container) return;
@@ -61,7 +57,7 @@ export const MapModule = () => {
           src={`https://geois2.orb.ru/resource/8888/display/tiny?base=basemap_0&lon=${center.lon}&lat=${center.lat}&angle=0&zoom=${zoom}`}
           className='pointer-events-none z-0 h-full w-full'
         />
-        <Marker markers={markers} handleMarkerClick={handleMarkerClick} />
+        <Marker markers={markers} />
       </div>
 
       <OrderModal isOpen={isOpen} onOpen={onOpen} onOpenChange={onOpenChange} coordinates={coordinates} />
