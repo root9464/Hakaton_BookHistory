@@ -68,3 +68,11 @@ type AttachmentRequest struct {
 		Size int    `json:"size"`
 	} `json:"file_upload"`
 }
+
+
+type ArtInfo struct {
+    FIO   string `json:"fio"`
+    Years string `json:"years"`
+    Photo string `json:"photo,omitempty"`
+    Text  string `json:"text"`
+}

@@ -23,7 +23,7 @@ type UserResponse struct {
 	} `json:"cords"`
 }
 
-func (s *apiService) GetRecords(ctx context.Context) ([]api_dto.FeatureCord, error) {
+func (s *apiService) GetRecords(ctx context.Context) ([]map[string]interface{}, error) {
 	req, err := http.NewRequest("GET", s.config.EXTERNAL_API, nil)
 	if err != nil {
 		s.logger.Infof("Ошибка при создании запроса: %s", err)
@@ -67,7 +67,7 @@ func (s *apiService) GetRecords(ctx context.Context) ([]api_dto.FeatureCord, err
 		return nil, err
 	}
 
-	var results []api_dto.FeatureCord
+	var results []map[string]interface{}
 
 	for _, feature := range features {
 		if feature.Geom != "" {
@@ -95,19 +95,14 @@ func (s *apiService) GetRecords(ctx context.Context) ([]api_dto.FeatureCord, err
 				return nil, fmt.Errorf("ошибка при парсинге широты: %s", err)
 			}
 
-			featureCord := api_dto.FeatureCord{
-				ID: feature.ID,
-				Coords: struct {
-					Lat float64 `json:"lat"`
-					Lon float64 `json:"lon"`
-				}{
-					Lat: lat,
-					Lon: lon,
+			featureCord := map[string]interface{}{
+				"uuid": feature.Fields.UUID,
+				"cords": map[string]float64{
+					"lat": lat,
+					"lon": lon,
 				},
-				Fields:     feature.Fields,
-				Extensions: feature.Extensions,
 			}
-			featureCord.ID = 0
+
 			//uuid
 			results = append(results, featureCord)
 		}
@@ -184,8 +179,7 @@ func (s *apiService) GetRecordByID(ctx context.Context, id string) (map[string]i
 				return nil, fmt.Errorf("ошибка при парсинге широты: %s", err)
 			}
 
-			
-			record.ID=0
+			record.ID = 0
 			//record.Fields.UUID=id
 			return map[string]interface{}{
 				"uuid": record.Fields.UUID,
@@ -202,7 +196,6 @@ func (s *apiService) GetRecordByID(ctx context.Context, id string) (map[string]i
 		Message: fmt.Sprintf("Запись с ID %s не найдена", id),
 	}
 }
-
 
 func (s *apiService) GetFullRecordByID(ctx context.Context, id string) (*api_dto.Feature, error) {
 	req, err := http.NewRequest("GET", s.config.EXTERNAL_API, nil)
@@ -256,7 +249,6 @@ func (s *apiService) GetFullRecordByID(ctx context.Context, id string) (*api_dto
 		Message: fmt.Sprintf("Запись с ID %s не найдена", id),
 	}
 
-	
 }
 
 func convertEPSG3857to4326(geom string) (string, error) {
@@ -289,7 +281,7 @@ func convertEPSG3857to4326(geom string) (string, error) {
 	return fmt.Sprintf("POINT(%f %f)", lon, lat), nil
 }
 
-func (s *apiService) GetArtInfo(ctx context.Context, id string) (*api_dto.Feature, error) {
+func (s *apiService) GetArtInfo(ctx context.Context, id string) (*api_dto.ArtInfo, error) {
 	req, err := http.NewRequest("GET", s.config.EXTERNAL_API, nil)
 	if err != nil {
 		s.logger.Infof("Ошибка при создании запроса: %s", err)
@@ -320,6 +312,7 @@ func (s *apiService) GetArtInfo(ctx context.Context, id string) (*api_dto.Featur
 	if resp.StatusCode >= 400 {
 		return nil, fmt.Errorf("ошибка сервера: %s, тело ответа: %s", resp.Status, string(body))
 	}
+
 	// Десериализация JSON-ответа в массив объектов
 	var features []api_dto.Feature
 	err = json.Unmarshal(body, &features)
@@ -327,15 +320,67 @@ func (s *apiService) GetArtInfo(ctx context.Context, id string) (*api_dto.Featur
 		s.logger.Infof("Ошибка при десериализации ответа: %s", err)
 		return nil, err
 	}
+
 	// Поиск нужной записи по ID
 	for _, record := range features {
-		if strconv.Itoa(record.ID) == id {
-			return &record, nil
+		if record.Fields.UUID == id {
+			// Формируем художественный текст
+			artText := buildArtText(record.Fields)
+
+			// Извлекаем фото, если есть
+			var photoURL string
+			if len(record.Extensions.Attachment) > 0 {
+				photoURL = record.Extensions.Attachment[0].MimeType //глушка
+			}
+
+			// Создаём объект с нужными данными
+			artInfo := &api_dto.ArtInfo{
+				FIO:   record.Fields.FullName,
+				Years: record.Fields.Years,
+				Photo: photoURL,
+				Text:  artText,
+			}
+			return artInfo, nil
 		}
 	}
+
 	// Если запись не найдена
 	return nil, &fiber.Error{
 		Code:    fiber.StatusNotFound,
 		Message: fmt.Sprintf("Запись с ID %s не найдена", id),
 	}
+}
+
+func buildArtText(fields api_dto.Fields) string {
+    var builder strings.Builder
+
+    // Основная информация
+    builder.WriteString(fmt.Sprintf("В далёком %s году в %s ", 
+        strings.Split(fields.Years, " – ")[0][6:], // Извлекаем год рождения
+        strings.Split(fields.Info, ". ")[0]))     // Место рождения
+
+    // Образование
+    if fields.Info != "" && len(strings.Split(fields.Info, ". ")) > 1 {
+        builder.WriteString(fmt.Sprintf("началась жизнь %s. ", fields.FullName))
+        builder.WriteString(fmt.Sprintf("Судьба вела его через %s ", 
+            strings.Join(strings.Split(fields.Info, ". ")[1:], ". ")),
+		)
+    }
+
+    // Район
+    builder.WriteString(fmt.Sprintf("Корни его - в %s крае. ", fields.Region))
+
+    // Военная служба
+    builder.WriteString(fmt.Sprintf("Служба в %s стала важной главой его судьбы. ", fields.Conflict))
+
+    // Награды
+    if fields.Awards != "" {
+        builder.WriteString(fmt.Sprintf("За свои подвиги он был %s. ", fields.Awards))
+    }
+
+    // Эпилог
+    builder.WriteString(fmt.Sprintf("Память о %s, прожившем яркую жизнь с %s, навсегда останется в наших сердцах.", 
+        fields.FullName, fields.Years))
+
+    return builder.String()
 }
