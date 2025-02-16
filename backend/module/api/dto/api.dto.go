@@ -10,21 +10,29 @@ type Feature struct {
 	} `json:"extensions,omitempty"`
 }
 
+type FeatureCord struct {
+	ID     string `json:"id,omitempty"` // Уникальный идентификатор записи
+	Coords struct {
+		Lat float64 `json:"lat"`
+		Lon float64 `json:"lon"`
+	} `json:"cords"`
+}
+
 type Fields struct {
-	Num      float64 `json:"num"`                // Номер записи
-	Region   string  `json:"n_raion"`            // Муниципальное образование
-	FullName string  `json:"fio"`                // ФИО
-	Years    string  `json:"years"`              // Годы жизни
-	Info     string  `json:"info,omitempty"`     // Биография
-	Conflict string  `json:"kontrakt,omitempty"` // Вооруженный конфликт
-	Awards   string  `json:"nagrads,omitempty"`  // Награды
+	UUID     string `json:"uuid"`               // Номер записи
+	Region   string `json:"n_raion"`            // Муниципальное образование
+	FullName string `json:"fio"`                // ФИО
+	Years    string `json:"years"`              // Годы жизни
+	Info     string `json:"info,omitempty"`     // Биография
+	Conflict string `json:"kontrakt,omitempty"` // Вооруженный конфликт
+	Awards   string `json:"nagrads,omitempty"`  // Награды
 }
 
 type Attachment struct {
 	ID       float64 `json:"id"`
-	Name     string `json:"name"`
-	Size     int    `json:"size"`
-	MimeType string `json:"mime_type"`
+	Name     string  `json:"name"`
+	Size     int     `json:"size"`
+	MimeType string  `json:"mime_type"`
 }
 
 // API запросы
@@ -38,7 +46,7 @@ type CreateFeatureRequest struct {
 		Attachment  *Attachment `json:"attachment,omitempty"`
 		Description string      `json:"description,omitempty"`
 	} `json:"extensions,omitempty"`
-	Geom       string `json:"geom"`   // Координаты точки
+	Geom string `json:"geom"` // Координаты точки
 }
 
 type CreateFeatureResponse struct {
