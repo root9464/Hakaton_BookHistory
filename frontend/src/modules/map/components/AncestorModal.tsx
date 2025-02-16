@@ -1,24 +1,23 @@
 import { Button, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader } from '@heroui/react';
-import { Point } from 'framer-motion';
+import { ReactNode } from '@tanstack/react-router';
 import { useAncestor } from '../hook/useAncestor';
+import { Point } from '../Module';
 
 type AncestorModalProps = {
   isOpen: boolean;
-  onOpen: () => void;
   onOpenChange: () => void;
   coordinates: Point & { id: string };
+  children?: ReactNode;
 };
 
-export const AncestorModal = ({ isOpen, onOpen, onOpenChange, coordinates }: AncestorModalProps) => {
+export const AncestorModal = ({ isOpen, onOpenChange, coordinates, children }: AncestorModalProps) => {
   const { data } = useAncestor(coordinates.id);
 
   return (
     <>
-      <button onClick={onOpen} className='data?s-center flex h-fit w-fit flex-row justify-center bg-transparent text-white'>
-        Create
-      </button>
-      <Modal isOpen={isOpen} onOpenChange={onOpenChange} size='full'>
-        <ModalContent className='z-[2]'>
+      {children}
+      <Modal isOpen={isOpen} onOpenChange={onOpenChange} size='full' className='z-[2]'>
+        <ModalContent>
           {(onClose) => (
             <>
               <ModalHeader className='flex flex-col gap-1'>Информация о герое</ModalHeader>

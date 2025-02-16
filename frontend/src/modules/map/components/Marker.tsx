@@ -19,7 +19,7 @@ export const Marker = ({ markers }: MarkerProps) => {
         <Fragment key={index}>
           <div
             key={index}
-            className='absolute z-[1] h-6 w-6 animate-pulse cursor-pointer rounded-full bg-red-500'
+            className='absolute z-[2] h-6 w-6 animate-pulse cursor-pointer rounded-full bg-red-500'
             style={{ left: x - 12, top: y - 12 }}
             onClick={(event) => {
               event.stopPropagation();
@@ -27,7 +27,7 @@ export const Marker = ({ markers }: MarkerProps) => {
               handleMarkerClick({ x, y });
             }}
           />
-          <AncestorModal coordinates={{ id, x, y }} isOpen={isOpen} onOpen={onOpen} onOpenChange={onOpenChange} />
+          <AncestorModal coordinates={{ id, lat: y, lon: x }} isOpen={isOpen} onOpenChange={onOpenChange} />
         </Fragment>
       ))}
     </>

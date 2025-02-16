@@ -13,6 +13,7 @@
 import { Route as rootRoute } from './routes/__root'
 import { Route as IndexImport } from './routes/index'
 import { Route as MapIndexImport } from './routes/map/index'
+import { Route as AdminIndexImport } from './routes/admin/index'
 import { Route as authRegisterImport } from './routes/(auth)/register'
 import { Route as authLoginImport } from './routes/(auth)/login'
 
@@ -27,6 +28,12 @@ const IndexRoute = IndexImport.update({
 const MapIndexRoute = MapIndexImport.update({
   id: '/map/',
   path: '/map/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const AdminIndexRoute = AdminIndexImport.update({
+  id: '/admin/',
+  path: '/admin/',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -67,6 +74,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof authRegisterImport
       parentRoute: typeof rootRoute
     }
+    '/admin/': {
+      id: '/admin/'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminIndexImport
+      parentRoute: typeof rootRoute
+    }
     '/map/': {
       id: '/map/'
       path: '/map'
@@ -83,6 +97,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/login': typeof authLoginRoute
   '/register': typeof authRegisterRoute
+  '/admin': typeof AdminIndexRoute
   '/map': typeof MapIndexRoute
 }
 
@@ -90,6 +105,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/login': typeof authLoginRoute
   '/register': typeof authRegisterRoute
+  '/admin': typeof AdminIndexRoute
   '/map': typeof MapIndexRoute
 }
 
@@ -98,15 +114,22 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/(auth)/login': typeof authLoginRoute
   '/(auth)/register': typeof authRegisterRoute
+  '/admin/': typeof AdminIndexRoute
   '/map/': typeof MapIndexRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/login' | '/register' | '/map'
+  fullPaths: '/' | '/login' | '/register' | '/admin' | '/map'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/login' | '/register' | '/map'
-  id: '__root__' | '/' | '/(auth)/login' | '/(auth)/register' | '/map/'
+  to: '/' | '/login' | '/register' | '/admin' | '/map'
+  id:
+    | '__root__'
+    | '/'
+    | '/(auth)/login'
+    | '/(auth)/register'
+    | '/admin/'
+    | '/map/'
   fileRoutesById: FileRoutesById
 }
 
@@ -114,6 +137,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   authLoginRoute: typeof authLoginRoute
   authRegisterRoute: typeof authRegisterRoute
+  AdminIndexRoute: typeof AdminIndexRoute
   MapIndexRoute: typeof MapIndexRoute
 }
 
@@ -121,6 +145,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   authLoginRoute: authLoginRoute,
   authRegisterRoute: authRegisterRoute,
+  AdminIndexRoute: AdminIndexRoute,
   MapIndexRoute: MapIndexRoute,
 }
 
@@ -137,6 +162,7 @@ export const routeTree = rootRoute
         "/",
         "/(auth)/login",
         "/(auth)/register",
+        "/admin/",
         "/map/"
       ]
     },
@@ -148,6 +174,9 @@ export const routeTree = rootRoute
     },
     "/(auth)/register": {
       "filePath": "(auth)/register.tsx"
+    },
+    "/admin/": {
+      "filePath": "admin/index.tsx"
     },
     "/map/": {
       "filePath": "map/index.tsx"
