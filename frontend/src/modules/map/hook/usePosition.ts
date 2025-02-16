@@ -2,9 +2,13 @@ import { RefObject, useEffect, useState } from 'react';
 import { PixelPosition, Point } from '../Module';
 import { project } from '../utils/utils';
 
-// hooks/useMarkerPositions.ts
-export const useMarkerPositions = (containerRef: RefObject<HTMLElement | null>, points: Point[], center: Point, zoom: number) => {
-  const [markers, setMarkers] = useState<PixelPosition[]>([]);
+export const useMarkerPositions = (
+  containerRef: RefObject<HTMLElement | null>,
+  points: (Point & { id: string })[],
+  center: Point,
+  zoom: number,
+) => {
+  const [markers, setMarkers] = useState<Array<PixelPosition & { id: string }>>([]);
 
   useEffect(() => {
     const container = containerRef.current;
@@ -23,6 +27,7 @@ export const useMarkerPositions = (containerRef: RefObject<HTMLElement | null>, 
         return {
           x: containerCenterX + (pointCoords.x - centerCoords.x),
           y: containerCenterY + (pointCoords.y - centerCoords.y),
+          id: point.id,
         };
       });
 

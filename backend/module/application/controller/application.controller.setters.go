@@ -60,3 +60,26 @@ func (c *ApplicationController) UpdateStatus(ctx *fiber.Ctx) error {
 		"message": "Application updated successfully",
 	})
 }
+
+
+func (c *ApplicationController) SendEmail(ctx *fiber.Ctx) error {
+	email := new(application_dto.Email)
+	if err := ctx.BodyParser(email); err != nil {
+		c.logger.Errorf("error parsing body: %v", err)
+		return &fiber.Error{
+			Code:    400,
+			Message: err.Error(),
+		}
+	}
+
+	if err := c.applicationServ.SendEmail(ctx.Context(), email); err != nil {
+		c.logger.Errorf("error sending email: %v", err)
+		if errorResponse, code := utils.HandlerError(err); errorResponse != nil {
+			return ctx.Status(code).JSON(errorResponse)	
+		}
+	}
+	return ctx.Status(200).JSON(fiber.Map{
+		"status":  "success",
+		"message": "Email sent successfully",
+	})
+}

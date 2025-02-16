@@ -1,6 +1,7 @@
 import { useWindow } from '@/shared/hooks/useWindow';
-import { useRef } from 'react';
+import { useMemo, useRef } from 'react';
 import { Marker } from './components/Marker';
+import { useCords } from './hook/useCords';
 import { useMarkerPositions } from './hook/usePosition';
 import { project, toEPSG3857Direct } from './utils/utils';
 
@@ -9,13 +10,17 @@ export type PixelPosition = { x: number; y: number };
 
 const center: Point = { lat: 52.3898, lon: 56.0525 };
 
-const points: Point[] = [{ lon: 56.24544738769535, lat: 52.307169878255536 }];
-
 export const MapModule = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const { width, height } = useWindow();
-
   const zoom = width > height ? 10 : 9;
+
+  const { data } = useCords();
+
+  const points = useMemo(() => {
+    return data ? data.map((item) => ({ lat: item.cords.lat, lon: item.cords.lon, id: String(item.userID) })) : [];
+  }, [data]);
+
   const markers = useMarkerPositions(containerRef, points, center, zoom);
 
   const handleMarkerClick = (index: number) => {

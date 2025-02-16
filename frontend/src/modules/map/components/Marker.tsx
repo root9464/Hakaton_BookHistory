@@ -1,7 +1,7 @@
 import { PixelPosition } from '../Module';
 
 type MarkerProps = {
-  markers: PixelPosition[];
+  markers: Array<PixelPosition & { id: string }>;
   handleMarkerClick: (index: number) => void;
 };
 

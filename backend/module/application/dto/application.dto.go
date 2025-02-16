@@ -17,3 +17,12 @@ type CreateApplicationDto struct {
 type UpdateStatus struct {
 	Status string `json:"status" validate:"required,oneof=draft published"`
 }
+
+type Email struct {
+	Email     string `json:"email" validate:"required,email"`
+	Password string `json:"password"`
+	Message  string `json:"message" validate:"required"`
+}
+
+type EmailService struct {
+}

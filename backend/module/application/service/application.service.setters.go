@@ -2,6 +2,7 @@ package application_service
 
 import (
 	"context"
+	"net/smtp"
 
 	"github.com/gofiber/fiber/v2"
 	application_dto "github.com/root9464/Hakaton_BookHistory/module/application/dto"
@@ -76,6 +77,33 @@ func (s *ApplicationService) UpdateStatus(ctx context.Context, id string, dto *a
 
 	if err := s.repo.Update(ctx, &application_model.Application{ID: id, Status: application_model.Status(dto.Status)}); err != nil {
 		s.logger.Errorf("error updating application: %v", err)
+		return &fiber.Error{
+			Code:    500,
+			Message: err.Error(),
+		}
+	}
+
+	return nil
+}
+
+func (s *ApplicationService) SendEmail(ctx context.Context, dto *application_dto.Email) error {
+	if err := s.validator.Struct(dto); err != nil {
+		s.logger.Warnf("validation error: %v", err)
+		return &fiber.Error{
+			Code:    400,
+			Message: err.Error(),
+		}
+	}
+
+	host := "smtp.gmail.com"
+	port := "587"
+	to := []string{"ivanbatutin6002@mail.ru"}
+
+	auth := smtp.PlainAuth("", dto.Email, dto.Password, host)
+
+	err := smtp.SendMail(host+":"+port, auth, dto.Email, to, []byte(dto.Message))
+	if err != nil {
+		s.logger.Errorf("error sending email: %v", err)
 		return &fiber.Error{
 			Code:    500,
 			Message: err.Error(),
