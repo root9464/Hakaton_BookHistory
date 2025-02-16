@@ -15,6 +15,7 @@ type IApiService interface {
 	CreateRecord(ctx context.Context, dto *api_dto.CreateFeatureRequest) (*api_dto.CreateFeatureResponse, error)
 	GetRecords(ctx context.Context) ([]api_dto.FeatureCord, error)
 	GetRecordByID(ctx context.Context, id string) (map[string]interface{}, error)
+	GetFullRecordByID(ctx context.Context, id string) (*api_dto.Feature, error)
 	DeleteRecord(ctx context.Context, ids []api_dto.CreateFeatureResponse) error
 	UpdateRecord(ctx context.Context, id string, dto *api_dto.CreateFeatureRequest) error
 

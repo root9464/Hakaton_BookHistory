@@ -43,6 +43,8 @@ func (m *ApiModule) AuthRoutes(router fiber.Router) {
 
 	auth.Get("/get", m.ApiController().GetRecords)
 	auth.Get("/get/:id", m.ApiController().GetRecordByID)
+	auth.Get("/get-full/:id", m.ApiController().GetFullRecordByID)
+
 	auth.Post("/create", m.ApiController().CreateRecord)
 	auth.Delete("/delete", m.ApiController().DeleteRecord)
 	auth.Put("/update/:id", m.ApiController().UpadateRecord)

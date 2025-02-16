@@ -14,8 +14,9 @@ type IApiController interface {
 	// //Запрос информации по записи
 	GetRecords(ctx *fiber.Ctx) error
 
-	
+
 	GetRecordByID(ctx *fiber.Ctx) error
+	GetFullRecordByID(ctx *fiber.Ctx) error
 
 	// //Удаление записи
 	DeleteRecord(ctx *fiber.Ctx) error
