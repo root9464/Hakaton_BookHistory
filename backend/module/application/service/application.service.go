@@ -9,6 +9,7 @@ import (
 	application_repository "github.com/root9464/Hakaton_BookHistory/module/application/repository"
 	file_dto "github.com/root9464/Hakaton_BookHistory/module/file/dto"
 	file_service "github.com/root9464/Hakaton_BookHistory/module/file/service"
+	reward_service "github.com/root9464/Hakaton_BookHistory/module/reward/service"
 	"github.com/root9464/Hakaton_BookHistory/shared/logger"
 )
 
@@ -20,6 +21,8 @@ type IApplicationService interface {
 	UpdateStatus(ctx context.Context, id string, dto *application_dto.UpdateStatus) error
 	SendEmail(ctx context.Context, email *application_dto.Email) error
 	GetByID(ctx context.Context, id string) (*application_model.Application, error)
+	UpdateAll(ctx context.Context, application *application_model.Application) error
+	GetByStatus(ctx context.Context, status string) ([]application_model.Application, error)
 }
 
 type ApplicationService struct {
@@ -27,14 +30,16 @@ type ApplicationService struct {
 	logger    *logger.Logger
 	validator *validator.Validate
 
-	fileServ file_service.IFileService
+	fileServ   file_service.IFileService
+	rewardServ reward_service.IRewardService
 }
 
-func NewApplicationService(logger *logger.Logger, repo application_repository.IApplicationRepository, vavalidator *validator.Validate, fileServ file_service.IFileService) *ApplicationService {
+func NewApplicationService(logger *logger.Logger, repo application_repository.IApplicationRepository, vavalidator *validator.Validate, fileServ file_service.IFileService, rewardServ reward_service.IRewardService) *ApplicationService {
 	return &ApplicationService{
-		repo:      repo,
-		logger:    logger,
-		validator: vavalidator,
-		fileServ:  fileServ,
+		repo:       repo,
+		logger:     logger,
+		validator:  vavalidator,
+		fileServ:   fileServ,
+		rewardServ: rewardServ,
 	}
 }

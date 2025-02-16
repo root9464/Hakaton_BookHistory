@@ -43,8 +43,8 @@ func (p *moduleProvider) initDeps() error {
 		p.UserModule,
 		p.AuthModule,
 		p.FileModule,
-		p.ApplicationModule,
 		p.RewardModule,
+		p.ApplicationModule,
 		p.ApiModule,
 	}
 	for _, init := range inits {
@@ -78,7 +78,7 @@ func (p *moduleProvider) FileModule() error {
 }
 
 func (p *moduleProvider) ApplicationModule() error {
-	p.applicationModule = application_module.NewApplicationModule(p.app.logger, p.app.db, p.fileModule.FileService())
+	p.applicationModule = application_module.NewApplicationModule(p.app.logger, p.app.db, p.fileModule.FileService(), p.rewardModule.RewardService())
 	return nil
 }
 

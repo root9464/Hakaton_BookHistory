@@ -3,6 +3,7 @@ package application_controller
 import (
 	"github.com/gofiber/fiber/v2"
 	application_dto "github.com/root9464/Hakaton_BookHistory/module/application/dto"
+	application_model "github.com/root9464/Hakaton_BookHistory/module/application/model"
 	file_dto "github.com/root9464/Hakaton_BookHistory/module/file/dto"
 	"github.com/root9464/Hakaton_BookHistory/shared/utils"
 )
@@ -61,7 +62,6 @@ func (c *ApplicationController) UpdateStatus(ctx *fiber.Ctx) error {
 	})
 }
 
-
 func (c *ApplicationController) SendEmail(ctx *fiber.Ctx) error {
 	email := new(application_dto.Email)
 	if err := ctx.BodyParser(email); err != nil {
@@ -75,7 +75,7 @@ func (c *ApplicationController) SendEmail(ctx *fiber.Ctx) error {
 	if err := c.applicationServ.SendEmail(ctx.Context(), email); err != nil {
 		c.logger.Errorf("error sending email: %v", err)
 		if errorResponse, code := utils.HandlerError(err); errorResponse != nil {
-			return ctx.Status(code).JSON(errorResponse)	
+			return ctx.Status(code).JSON(errorResponse)
 		}
 	}
 	return ctx.Status(200).JSON(fiber.Map{
@@ -83,3 +83,26 @@ func (c *ApplicationController) SendEmail(ctx *fiber.Ctx) error {
 		"message": "Email sent successfully",
 	})
 }
+
+func (c *ApplicationController) UpdateAll(ctx *fiber.Ctx) error {
+	application := new(application_model.Application)
+	if err := ctx.BodyParser(application); err != nil {
+		c.logger.Errorf("error parsing body: %v", err)
+		return &fiber.Error{
+			Code:    400,
+			Message: err.Error(),
+		}
+	}
+
+	if err := c.applicationServ.UpdateAll(ctx.Context(), application); err != nil {
+		c.logger.Errorf("error updating application: %v", err)
+		if errorResponse, code := utils.HandlerError(err); errorResponse != nil {
+			return ctx.Status(code).JSON(errorResponse)
+		}
+	}
+	return ctx.Status(200).JSON(fiber.Map{
+		"status":  "success",
+		"message": "Application updated successfully",
+	})
+}
+

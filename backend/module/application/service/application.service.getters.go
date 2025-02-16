@@ -32,3 +32,16 @@ func (s *ApplicationService) GetByID(ctx context.Context, id string) (*applicati
 
 	return application, nil
 }
+
+func (s *ApplicationService) GetByStatus(ctx context.Context, status string) ([]application_model.Application, error) {
+	applications, err := s.repo.GetByStatus(ctx, status)
+	if err != nil {
+		s.logger.Errorf("error getting applications: %v", err)
+		return nil, &fiber.Error{
+			Code:    500,
+			Message: err.Error(),
+		}
+	}
+
+	return applications, nil
+}

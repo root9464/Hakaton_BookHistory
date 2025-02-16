@@ -12,6 +12,7 @@ type CreateApplicationDto struct {
 	DateOfDeath                 string `form:"date_of_death"`
 	BurialPlace                 string `form:"burial_place"`
 	BiographicalFacts           string `form:"biographical_facts"`
+	Rewards                     string `form:"rewards"`
 }
 
 type UpdateStatus struct {
@@ -19,7 +20,7 @@ type UpdateStatus struct {
 }
 
 type Email struct {
-	Email     string `json:"email" validate:"required,email"`
+	Email    string `json:"email" validate:"required,email"`
 	Password string `json:"password"`
 	Message  string `json:"message" validate:"required"`
 }

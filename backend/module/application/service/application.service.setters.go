@@ -3,6 +3,7 @@ package application_service
 import (
 	"context"
 	"net/smtp"
+	"strings"
 
 	"github.com/gofiber/fiber/v2"
 	application_dto "github.com/root9464/Hakaton_BookHistory/module/application/dto"
@@ -25,6 +26,8 @@ func (s *ApplicationService) Create(ctx context.Context, dto *application_dto.Cr
 		}
 	}
 
+	rewardsUUIDs := strings.Split(dto.Rewards, ",")
+
 	s.logger.Info("converting dto to entity")
 
 	applicationModel, err := utils.ConvertDtoToEntity[application_model.Application](dto)
@@ -34,6 +37,18 @@ func (s *ApplicationService) Create(ctx context.Context, dto *application_dto.Cr
 			Code:    fiber.StatusInternalServerError,
 			Message: err.Error(),
 		}
+	}
+
+	for _, rewardUUID := range rewardsUUIDs {
+		reward, err := s.rewardServ.GetByID(ctx, rewardUUID)
+		if err != nil {
+			s.logger.Errorf("error getting reward: %v", err)
+			return &fiber.Error{
+				Code:    fiber.StatusInternalServerError,
+				Message: err.Error(),
+			}
+		}
+		applicationModel.Rewards = append(applicationModel.Rewards, *reward)
 	}
 
 	s.logger.Infof("converting dto to entity: %v", applicationModel)
@@ -76,6 +91,18 @@ func (s *ApplicationService) UpdateStatus(ctx context.Context, id string, dto *a
 	}
 
 	if err := s.repo.Update(ctx, &application_model.Application{ID: id, Status: application_model.Status(dto.Status)}); err != nil {
+		s.logger.Errorf("error updating application: %v", err)
+		return &fiber.Error{
+			Code:    500,
+			Message: err.Error(),
+		}
+	}
+
+	return nil
+}
+
+func (s *ApplicationService) UpdateAll(ctx context.Context, application *application_model.Application) error {
+	if err := s.repo.UpdateAll(ctx, application); err != nil {
 		s.logger.Errorf("error updating application: %v", err)
 		return &fiber.Error{
 			Code:    500,

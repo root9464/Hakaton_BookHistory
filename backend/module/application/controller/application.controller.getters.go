@@ -35,3 +35,19 @@ func (c *ApplicationController) GetByID(ctx *fiber.Ctx) error {
 		"data":    application,
 	})
 }
+
+func (c *ApplicationController) GetByStatus(ctx *fiber.Ctx) error {
+	status := ctx.Params("status")
+	applications, err := c.applicationServ.GetByStatus(ctx.Context(), status)
+	if err != nil {
+		if errorResponse, code := utils.HandlerError(err); errorResponse != nil {
+			return ctx.Status(code).JSON(errorResponse)
+		}
+	}
+
+	return ctx.Status(200).JSON(fiber.Map{
+		"status":  "success",
+		"message": "Applications found successfully",
+		"data":    applications,
+	})
+}

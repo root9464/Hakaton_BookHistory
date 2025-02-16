@@ -38,7 +38,8 @@ func (s *RewardService) Create(ctx context.Context, reward *reward_dto.CreateRew
 		}
 	}
 
-	if len(names) > 0 {
+	s.logger.Infof("names: %v", names)
+	if len(names) != 0 {
 		rewardModel.Image = file_model.File{
 			Name: names[0],
 		}
