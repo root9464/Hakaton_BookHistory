@@ -1,15 +1,12 @@
 import { ReactComponent as SendPublicIcon } from '@/assets/svg/public.svg';
 import { Button, Chip, getKeyValue, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from '@heroui/react';
 import { Link } from '@tanstack/react-router';
+import { useCombinedOrders } from '../hooks/useOrder';
 
 const COLUMNS = [
   {
-    name: 'NAME',
-    uid: 'name',
-  },
-  {
-    name: 'SURNAME',
-    uid: 'surname',
+    name: 'FIO',
+    uid: 'fio',
   },
   {
     name: 'STATUS',
@@ -25,15 +22,20 @@ const COLUMNS = [
   },
 ];
 
-const ROWS = [
-  { name: 'Иван', surname: 'Иванов', status: 'На публикацию', actions: 'Упобликовать', view: { id: '1', lat: 1, lon: 1 } },
-  { name: 'Петр', surname: 'Петров', status: 'На публикацию', actions: 'Упобликовать', view: { id: '2', lat: 2, lon: 2 } },
-  { name: 'Сидор', surname: 'Сидоров', status: 'На публикацию', actions: 'Упобликовать', view: { id: '3', lat: 3, lon: 3 } },
-  { name: 'Василий', surname: 'Васильев', status: 'На публикацию', actions: 'Упобликовать', view: { id: '4', lat: 4, lon: 4 } },
-];
-
 export const TableAncestors = () => {
-  // const { data, isSuccess, isLoading, isError, error } = useOrder();
+  const { data } = useCombinedOrders();
+  const ROWS = data
+    ? data.map((order) => {
+        const [lon, lat] = order.geom.match(/\d+\.\d+/g)?.map(Number) || [0, 0];
+        return {
+          fio: order.fio,
+          status: order.status === 'draft' ? 'На публикацию' : order.status,
+          actions: 'Упобликовать',
+          view: { id: order.id, lat, lon },
+        };
+      })
+    : [];
+
   return (
     <Table
       aria-label='Example table with dynamic content'
@@ -53,7 +55,7 @@ export const TableAncestors = () => {
       </TableHeader>
       <TableBody items={ROWS}>
         {(item) => (
-          <TableRow key={item.name}>
+          <TableRow key={item.fio}>
             {(columnKey) => (
               <TableCell className='w-max'>
                 {columnKey === 'actions' && (

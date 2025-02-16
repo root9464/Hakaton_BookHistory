@@ -1,7 +1,8 @@
-import { SuccessResponse } from '@/shared/types/zod';
+import { AncestorResponse, AncestorShema } from '@/modules/map/hook/useAncestor';
 import { validateResult } from '@/shared/utils/utils';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
+import { forkJoin, from, lastValueFrom, map, switchMap } from 'rxjs';
 import { z } from 'zod';
 
 const ImageSchema = z.object({
@@ -41,23 +42,36 @@ export const DataSchema = z.object({
   rewards: z.array(RewardSchema),
 });
 
-const OrderShema = SuccessResponse.extend({
+const OrderShema = z.object({
   data: z.array(DataSchema),
 });
 
 type GetOrderResponse = z.infer<typeof OrderShema>;
 
-export const useOrder = () =>
+export const useCombinedOrders = () =>
   useQuery({
-    queryKey: ['order'],
+    queryKey: ['combinedOrders'],
     queryFn: async () => {
-      const { data, status, statusText } = await axios.get<GetOrderResponse>('/api/application/status/draft');
-      if (status !== 200) {
-        throw new Error(`${status}: ${statusText}`);
-      }
-      return validateResult(data, OrderShema);
+      const orders$ = from(axios.get<GetOrderResponse>('/api/application/status/draft'));
+      const combined$ = orders$.pipe(
+        switchMap((ordersResponse) => {
+          const { data: ordersData } = validateResult(ordersResponse.data, OrderShema);
+          const ancestorRequests = ordersData.map((order) => from(axios.get<AncestorResponse>(`/api/application/${order.id}`)));
+          return forkJoin(ancestorRequests).pipe(
+            map((ancestorResponses) => {
+              const ancestorData = ancestorResponses.map((response) => validateResult(response.data, AncestorShema).data);
+              return ordersData.map((order, index) => ({
+                ...order,
+                ancestorDetails: ancestorData[index],
+              }));
+            }),
+          );
+        }),
+      );
+
+      return lastValueFrom(combined$);
     },
-    staleTime: 1000 * 60,
+    staleTime: 1000 * 60 * 5,
     refetchOnWindowFocus: false,
     refetchOnMount: false,
   });

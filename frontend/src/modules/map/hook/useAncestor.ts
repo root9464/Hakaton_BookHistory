@@ -5,11 +5,11 @@ import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import { z } from 'zod';
 
-const AncestorShema = SuccessResponse.extend({
+export const AncestorShema = SuccessResponse.extend({
   data: DataSchema,
 });
 
-type AncestorResponse = z.infer<typeof AncestorShema>;
+export type AncestorResponse = z.infer<typeof AncestorShema>;
 
 export const useAncestor = (id: string) =>
   useQuery({
