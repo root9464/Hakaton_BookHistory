@@ -16,6 +16,7 @@ type Application struct {
 
 	// Сведения о жителе Оренбургской области
 	FIO                         string            `json:"fio"`
+	Geom                        string            `json:"geom"`
 	DateOfBirth                 string            `json:"date_of_birth"`
 	PlaceOfBirth                string            `json:"place_of_birth"`
 	NameOfMillitaryCommissariat string            `json:"name_of_millitary_commissariat"`

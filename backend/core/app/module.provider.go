@@ -7,9 +7,11 @@ import (
 	jwt_module "github.com/root9464/Hakaton_Zalupa/module/jwt"
 	reward_module "github.com/root9464/Hakaton_Zalupa/module/reward"
 	user_module "github.com/root9464/Hakaton_Zalupa/module/user"
-)
 
-// jwt_module "github.com/root9464/Ton-students/module/jwt"
+	// jwt_module "github.com/root9464/Ton-students/module/jwt"
+	//jwt_module "github.com/root9464/Hakaton_Zalupa/module/jwt"
+	api_module "github.com/root9464/Hakaton_Zalupa/module/api"
+)
 
 type moduleProvider struct {
 	userModule        *user_module.UserModule
@@ -19,7 +21,11 @@ type moduleProvider struct {
 	applicationModule *application_module.ApplicationModule
 	rewardModule      *reward_module.RewardModule
 
-	app *App
+	// userModule          *user_module.UserModule
+
+	//jwtModule *jwt_module.JwtModule
+	apiModule *api_module.ApiModule
+	app       *App
 }
 
 func NewModuleProvider(app *App) (*moduleProvider, error) {
@@ -36,12 +42,13 @@ func NewModuleProvider(app *App) (*moduleProvider, error) {
 
 func (p *moduleProvider) initDeps() error {
 	inits := []func() error{
-		p.UserModule,
 		p.JwtModule,
+		p.UserModule,
 		p.AuthModule,
 		p.FileModule,
 		p.ApplicationModule,
 		p.RewardModule,
+		p.ApiModule,
 	}
 	for _, init := range inits {
 		err := init()
@@ -59,7 +66,7 @@ func (p *moduleProvider) JwtModule() error {
 }
 
 func (p *moduleProvider) UserModule() error {
-	p.userModule = user_module.NewUserModule(p.app.logger, p.app.validator, p.app.db)
+	p.userModule = user_module.NewUserModule(p.app.logger, p.app.validator, p.app.db, *p.jwtModule, p.app.config.JwtPublicKey)
 	return nil
 }
 
@@ -80,5 +87,10 @@ func (p *moduleProvider) ApplicationModule() error {
 
 func (p *moduleProvider) RewardModule() error {
 	p.rewardModule = reward_module.NewRewardModule(p.app.logger, p.app.validator, p.app.db, p.fileModule.FileService())
+	return nil
+}
+
+func (p *moduleProvider) ApiModule() error {
+	p.apiModule = api_module.NewApiModule(p.app.logger, p.app.config)
 	return nil
 }

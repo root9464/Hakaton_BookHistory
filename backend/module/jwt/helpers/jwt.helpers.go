@@ -92,7 +92,7 @@ func (h *jwtHelper) ParseJwt(tokenString string, key ed25519.PublicKey) (*jwt_dt
 
 		return &jwt_dto.UserJwtPayload{
 			Iss:  claims["iss"].(string),
-			Sub:  int64(claims["sub"].(float64)),
+			Sub:  claims["sub"].(string),
 			Iat:  int64(claims["iat"].(float64)),
 			Exp:  int64(claims["exp"].(float64)),
 			Role: *role,

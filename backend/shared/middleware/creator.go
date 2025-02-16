@@ -65,13 +65,22 @@ func (rm *Middleware) CreatorOnly() fiber.Handler {
 			})
 		}
 
+		var token string
 		tokenString := ctx.Get("Authorization")
-		if tokenString == "" {
+		if tokenString != "" {
+			token = tokenString
+		} else if ctx.Cookies("access_token") != "" {
+			token = "Bearer " + ctx.Cookies("access_token")
+		}
+
+		if token == "" {
 			rm.logger.Warn("Missing Authorization header")
 			return ctx.Status(401).JSON(fiber.Map{
 				"error": "Missing Authorization header",
 			})
 		}
+
+		tokenString = token
 
 		if len(tokenString) > 7 && tokenString[:7] == "Bearer " {
 			tokenString = tokenString[7:]
@@ -96,7 +105,7 @@ func (rm *Middleware) CreatorOnly() fiber.Handler {
 			})
 		}
 
-		rm.logger.Infof("User %d has role %s", userPayload.Sub, userPayload.Role)
+		rm.logger.Infof("User %s has role %s", userPayload.Sub, userPayload.Role)
 		if rolePriority[userPayload.Role] < rolePriority[user_model.AdminRole] {
 			return ctx.Status(403).JSON(fiber.Map{
 				"error": "Only admin role is allowed",

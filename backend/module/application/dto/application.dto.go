@@ -3,6 +3,7 @@ package application_dto
 type CreateApplicationDto struct {
 	SenderID string `form:"sender_id"`
 	// сведения о жителе Оренбургской области
+	Geom                        string `form:"geom"`
 	FIO                         string `form:"fio"`
 	DateOfBirth                 string `form:"date_of_birth"`
 	PlaceOfBirth                string `form:"place_of_birth"`
