@@ -2,6 +2,7 @@ import { ReactComponent as SendPublicIcon } from '@/assets/svg/public.svg';
 import { Button, Chip, getKeyValue, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from '@heroui/react';
 import { Link } from '@tanstack/react-router';
 import { useCombinedOrders } from '../hooks/useOrder';
+import { usePubliched } from '../hooks/usePubliched';
 
 const COLUMNS = [
   {
@@ -36,6 +37,8 @@ export const TableAncestors = () => {
       })
     : [];
 
+  const { mutate } = usePubliched();
+
   return (
     <Table
       aria-label='Example table with dynamic content'
@@ -59,7 +62,7 @@ export const TableAncestors = () => {
             {(columnKey) => (
               <TableCell className='w-max'>
                 {columnKey === 'actions' && (
-                  <Button className='flex items-center gap-2 text-white' color='success'>
+                  <Button className='flex items-center gap-2 text-white' color='success' onPress={() => mutate(item.view.id)}>
                     <SendPublicIcon className='h-5 w-5 stroke-white' />
                     <span>{getKeyValue(item, columnKey)}</span>
                   </Button>
