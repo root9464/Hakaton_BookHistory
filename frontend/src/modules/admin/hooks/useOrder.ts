@@ -24,7 +24,7 @@ const FileSchema = z.object({
   owner_type: z.string(),
 });
 
-const DataSchema = z.object({
+export const DataSchema = z.object({
   id: z.string(),
   sender_id: z.string(),
   fio: z.string(),
