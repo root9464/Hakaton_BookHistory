@@ -23,7 +23,7 @@ type UserResponse struct {
 	} `json:"cords"`
 }
 
-func (s *apiService) GetRecord(ctx context.Context) ([]UserResponse, error) {
+func (s *apiService) GetRecords(ctx context.Context) ([]api_dto.FeatureCord, error) {
 	req, err := http.NewRequest("GET", s.config.EXTERNAL_API, nil)
 	if err != nil {
 		s.logger.Infof("Ошибка при создании запроса: %s", err)
@@ -67,7 +67,7 @@ func (s *apiService) GetRecord(ctx context.Context) ([]UserResponse, error) {
 		return nil, err
 	}
 
-	var results []UserResponse
+	var results []api_dto.FeatureCord
 
 	for _, feature := range features {
 		if feature.Geom != "" {
@@ -77,7 +77,7 @@ func (s *apiService) GetRecord(ctx context.Context) ([]UserResponse, error) {
 				return nil, err
 			}
 
-			// Разбираем координаты
+			var lon, lat float64
 			convertedGeom = strings.TrimPrefix(convertedGeom, "POINT(")
 			convertedGeom = strings.TrimSuffix(convertedGeom, ")")
 			parts := strings.Split(convertedGeom, " ")
@@ -85,18 +85,18 @@ func (s *apiService) GetRecord(ctx context.Context) ([]UserResponse, error) {
 				return nil, fmt.Errorf("неверный формат координат: %s", convertedGeom)
 			}
 
-			lon, err := strconv.ParseFloat(parts[0], 64)
+			lon, err = strconv.ParseFloat(parts[0], 64)
 			if err != nil {
 				return nil, fmt.Errorf("ошибка при парсинге долготы: %s", err)
 			}
 
-			lat, err := strconv.ParseFloat(parts[1], 64)
+			lat, err = strconv.ParseFloat(parts[1], 64)
 			if err != nil {
 				return nil, fmt.Errorf("ошибка при парсинге широты: %s", err)
 			}
 
-			results = append(results, UserResponse{
-				UserID: feature.ID,
+			featureCord := api_dto.FeatureCord{
+				ID: feature.ID,
 				Coords: struct {
 					Lat float64 `json:"lat"`
 					Lon float64 `json:"lon"`
@@ -104,12 +104,18 @@ func (s *apiService) GetRecord(ctx context.Context) ([]UserResponse, error) {
 					Lat: lat,
 					Lon: lon,
 				},
-			})
+				Fields:     feature.Fields,
+				Extensions: feature.Extensions,
+			}
+
+			results = append(results, featureCord)
 		}
 	}
 
 	return results, nil
 }
+
+
 
 func (s *apiService) GetRecordByID(ctx context.Context, id string) (map[string]interface{}, error) {
 	req, err := http.NewRequest("GET", s.config.EXTERNAL_API, nil)

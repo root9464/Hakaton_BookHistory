@@ -2,8 +2,8 @@ package api_controller
 
 import "github.com/gofiber/fiber/v2"
 
-func (c *ApiController) GetRecord(ctx *fiber.Ctx) error {
-	resp, err:= c.apiService.GetRecord(ctx.Context())
+func (c *ApiController) GetRecords(ctx *fiber.Ctx) error {
+	resp, err:= c.apiService.GetRecords(ctx.Context())
 	if err != nil {
 		return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"status":  "failed",

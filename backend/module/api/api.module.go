@@ -41,7 +41,7 @@ func (m *ApiModule) ApiController() api_controller.IApiController {
 func (m *ApiModule) AuthRoutes(router fiber.Router) {
 	auth := router.Group("/exapi")
 
-	auth.Get("/get", m.ApiController().GetRecord)
+	auth.Get("/get", m.ApiController().GetRecords)
 	auth.Get("/get/:id", m.ApiController().GetRecordByID)
 	auth.Post("/create", m.ApiController().CreateRecord)
 	auth.Delete("/delete", m.ApiController().DeleteRecord)

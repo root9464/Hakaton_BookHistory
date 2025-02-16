@@ -12,9 +12,11 @@ type IApiController interface {
 	CreateRecord(ctx *fiber.Ctx) error
 
 	// //Запрос информации по записи
-	GetRecord(ctx *fiber.Ctx) error
-	GetRecordByID(ctx *fiber.Ctx) error
+	GetRecords(ctx *fiber.Ctx) error
+
 	
+	GetRecordByID(ctx *fiber.Ctx) error
+
 	// //Удаление записи
 	DeleteRecord(ctx *fiber.Ctx) error
 
@@ -29,8 +31,6 @@ type IApiController interface {
 
 	//Удаление вложения
 	DeleteAttachment(ctx *fiber.Ctx) error
-
-	
 }
 
 type ApiController struct {
